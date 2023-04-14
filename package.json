@@ -2,7 +2,7 @@
   "name": "Laelaps",
   "version": "0.1.0",
   "private": false,
-  "homepage": "https://jessejacob15.github.io",
+  "homepage": "https://jessejacob15.github.io/laelaps",
   "dependencies": {
     "-": "^0.0.1",
     "@testing-library/jest-dom": "^5.11.10",
