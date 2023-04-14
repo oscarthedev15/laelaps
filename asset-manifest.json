@@ -1,8 +1,8 @@
 {
   "files": {
     "main.css": "/laelaps/static/css/main.f6e172c7.chunk.css",
-    "main.js": "/laelaps/static/js/main.1ddc1408.chunk.js",
-    "main.js.map": "/laelaps/static/js/main.1ddc1408.chunk.js.map",
+    "main.js": "/laelaps/static/js/main.fb321370.chunk.js",
+    "main.js.map": "/laelaps/static/js/main.fb321370.chunk.js.map",
     "runtime-main.js": "/laelaps/static/js/runtime-main.dac316e1.js",
     "runtime-main.js.map": "/laelaps/static/js/runtime-main.dac316e1.js.map",
     "static/css/2.0a9ec390.chunk.css": "/laelaps/static/css/2.0a9ec390.chunk.css",
@@ -20,6 +20,6 @@
     "static/css/2.0a9ec390.chunk.css",
     "static/js/2.34c9ef7e.chunk.js",
     "static/css/main.f6e172c7.chunk.css",
-    "static/js/main.1ddc1408.chunk.js"
+    "static/js/main.fb321370.chunk.js"
   ]
 }
