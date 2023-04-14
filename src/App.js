@@ -12,7 +12,11 @@ class App extends React.Component {
         </div>
         <div className="d-flex justify-content-center">
           <div className="logoBox">
-            <img src="/laelaps.png" className="App-logo" alt="logo" />
+            <img
+              src="https://i.imgur.com/GiEaH0F.png"
+              className="App-logo"
+              alt="logo"
+            />
           </div>
         </div>
         <div className="d-flex justify-content-center">
@@ -66,7 +70,7 @@ class App extends React.Component {
             implementing a 2% maximum transaction limit and a 4% maximum wallet
             limit. These measures prevent early investors from dominating the
             supply, promoting a more equitable distribution of tokens for
-            participants entering the market around the same time. 
+            participants entering the market around the same time.
           </p>
         </div>
       </div>
@@ -74,3 +78,4 @@ class App extends React.Component {
   }
 }
 export default App;
+
