@@ -24,6 +24,8 @@ class App extends React.Component {
             it was hunting.
           </p>
         </div>
+        <br></br>
+
         <div className="square">
           <p className="textMain">
             SHXDXW is an Ethereum-based utility token that powers the
@@ -48,6 +50,7 @@ class App extends React.Component {
             wallet, providing a seamless and secure communication experience.
           </p>
         </div>
+        <br></br>
         <div className="square">
           <p className="textMain">
             Total Supply With a finite total supply of 100,000,000 tokens on the
@@ -63,7 +66,7 @@ class App extends React.Component {
             implementing a 2% maximum transaction limit and a 4% maximum wallet
             limit. These measures prevent early investors from dominating the
             supply, promoting a more equitable distribution of tokens for
-            participants entering the market around the same time. ﻿ silky#2468
+            participants entering the market around the same time. 
           </p>
         </div>
       </div>

@@ -13,7 +13,7 @@
 .App-logo {
   height: 50vmin;
   width: 50vmin;
-  padding-bottom: 15px;
+  /* padding-bottom: 15px; */
 
 }
 
@@ -25,17 +25,10 @@
 
 .background {
   background-color: black;
-  -webkit-background-size: cover;
-  -moz-background-size: cover;
-  -o-background-size: cover;
-  background-size: cover;
-  /* position: absolute; */
   align-items: center;
   justify-content: center;
-  top: 0;
-  left: 0;
   height: 100%;
-  width: 100%;
+
 }
 
 
@@ -50,20 +43,12 @@
   text-shadow: 3px 3px black;
 }
 
-.bottom {
-  margin: auto;
-  display: flex;
-  width: 80%;
-  align-items: center;
-  background-color: blue;
-}
-
 
 .square {
   display: flex;
   width: 70%;
   margin: 0 auto; /* Center horizontally */
-  margin-bottom: 2%;
+  /* margin-bottom: 2%; */
   align-items: center;
   background-color: black;
   border-color: #f1cb53;
