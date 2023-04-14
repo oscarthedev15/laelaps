@@ -1,0 +1,86 @@
+@font-face {
+    font-family: 'main-text';
+    src: url('./fonts/CapitalisTypOasis.ttf') 
+      
+}
+
+@font-face {
+    font-family: 'title';
+    src: url('./fonts/Adonais.ttf') 
+      
+}
+
+.App-logo {
+  height: 50vmin;
+  width: 50vmin;
+  padding-bottom: 15px;
+
+}
+
+.title {
+  font-family: 'title';
+  font-size: 80px;
+  color: #efd8b1;
+}
+
+.background {
+  background-color: black;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  /* position: absolute; */
+  align-items: center;
+  justify-content: center;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+}
+
+
+.slogan {
+  text-align: center;
+  align-items: center;
+  align-content: center;
+  font-style: italic;
+  font-family: 'Bebas Neue';
+  margin: auto;
+  color: white;
+  text-shadow: 3px 3px black;
+}
+
+.bottom {
+  margin: auto;
+  display: flex;
+  width: 80%;
+  align-items: center;
+  background-color: blue;
+}
+
+
+.square {
+  display: flex;
+  width: 70%;
+  margin: 0 auto; /* Center horizontally */
+  margin-bottom: 2%;
+  align-items: center;
+  background-color: black;
+  border-color: #f1cb53;
+  border: 20px;
+  border: 2px solid #f1cb53;
+  justify-content: center;
+  
+}
+
+.textMain {
+  margin: auto;
+  text-align: center;
+  /* font-family: 'Bebas Neue'; */
+  padding: 10px;
+  font-size: 15px;
+  color: #efd8b1;
+  font-family: 'main-text'
+}
+
+
