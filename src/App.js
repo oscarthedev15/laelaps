@@ -20,7 +20,9 @@ class App extends React.Component {
           </div>
         </div>
         <div className="d-flex justify-content-center">
-          <p className="title">Laelaps</p>
+          <div className="scrolling-text">
+            <p>Laelaps</p>
+          </div>
         </div>
         <div className="square">
           <p className="textMain">

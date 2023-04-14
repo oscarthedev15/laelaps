@@ -69,3 +69,25 @@ html, .background {
 }
 
 
+
+.scrolling-text {
+  white-space: nowrap; /* Prevent text from wrapping */
+  overflow: hidden; /* Hide text that goes outside of container */
+   font-family: 'title';
+  font-size: 80px;
+  color: #efd8b1;
+  width: 70%;
+}
+
+.scrolling-text p {
+  animation: scroll 5s linear infinite; /* Set the animation properties */
+}
+
+@keyframes scroll {
+  0% {
+    transform: translateX(100%); /* Starting position */
+  }
+  100% {
+    transform: translateX(-25%); /* Ending position */
+  }
+}
