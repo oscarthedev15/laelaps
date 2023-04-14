@@ -31,6 +31,23 @@ html, .background {
 
 }
 
+.access {
+  justify-content: center;
+  text-align: center;
+  font-family: 'title';
+  font-size: 30px;
+  color: #f1cb53;
+  margin-bottom: 10px;
+  text-decoration: none; /* remove underline */
+}
+a {
+  text-decoration: none; /* remove underline */
+  color: black; /* set default color */
+}
+
+a:hover {
+  color: red; /* change color when hovered */
+}
 
 .slogan {
   text-align: center;
@@ -38,7 +55,6 @@ html, .background {
   align-content: center;
   font-style: italic;
   font-family: 'Bebas Neue';
-  margin: auto;
   color: white;
   text-shadow: 3px 3px black;
 }
@@ -70,24 +86,3 @@ html, .background {
 
 
 
-.scrolling-text {
-  white-space: nowrap; /* Prevent text from wrapping */
-  overflow: hidden; /* Hide text that goes outside of container */
-   font-family: 'title';
-  font-size: 80px;
-  color: #efd8b1;
-  width: 70%;
-}
-
-.scrolling-text p {
-  animation: scroll 5s linear infinite; /* Set the animation properties */
-}
-
-@keyframes scroll {
-  0% {
-    transform: translateX(100%); /* Starting position */
-  }
-  100% {
-    transform: translateX(-25%); /* Ending position */
-  }
-}
