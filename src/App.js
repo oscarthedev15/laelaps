@@ -24,13 +24,17 @@ class App extends React.Component {
         </div>
         <div className="square">
           <p className="textMain">
-            Laelaps was a Greek mythological dog that never failed to catch what
-            it was hunting.
+            Behold, the mighty Laelaps! Descended from the hounds of the gods,
+            this magnificent creature has the speed and strength to catch
+            anything it pursues. With the agility of Hermes and the power of
+            Zeus, Laelaps is a force to be reckoned with. So beware, for if you
+            find yourself on the run from Laelaps, there is no escape from its
+            unrelenting pursuit.
           </p>
         </div>
         <br></br>
 
-        <div className="square">
+        {/* <div className="square">
           <p className="textMain">
             SHXDXW is an Ethereum-based utility token that powers the
             decentralized chat application, acting as the primary medium of
@@ -72,7 +76,7 @@ class App extends React.Component {
             supply, promoting a more equitable distribution of tokens for
             participants entering the market around the same time.
           </p>
-        </div>
+        </div> */}
       </div>
     );
   }

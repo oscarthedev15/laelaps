@@ -23,7 +23,7 @@
   color: #efd8b1;
 }
 
-.background {
+html, .background {
   background-color: black;
   align-items: center;
   justify-content: center;
