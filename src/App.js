@@ -23,8 +23,8 @@ class App extends React.Component {
           <div className="title">Laelaps</div>
         </div>
         <div className="access">
-          <a href="https://www.example.com" className="access">
-            Access services here
+          <a href="#" className="access">
+            Meet Laelaps
           </a>
         </div>
         <div className="square">
