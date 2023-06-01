@@ -1,0 +1,46 @@
+@font-face {
+  font-family: "main-text";
+  src: url("./fonts/CapitalisTypOasis.ttf");
+}
+
+
+
+.square {
+  display: flex;
+  width: 80%;
+  margin: 0 auto;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-color: #f1cb53;
+  border: 20px;
+}
+
+.textMain {
+  margin: auto;
+  text-align: center;
+  padding: 10px;
+  color: black;
+  font-family: "title";
+  font-size: 3vw;
+}
+
+.title {
+  color: purple;
+  font-family: "title";
+  font-size: 4vw; /* Adjust the value as per your preference */
+}
+
+@media (max-width: 768px) {
+  /* Adjust the breakpoint as per your preference */
+  .title {
+    font-size: 7vw; /* Adjust the value as per your preference */
+  }
+  .textMain{
+    font-size: 5vw;
+  }
+}

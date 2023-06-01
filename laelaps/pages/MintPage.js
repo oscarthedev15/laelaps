@@ -1,5 +1,5 @@
 
-import styles from "../styles/Utility.module.css";
+import styles from "../styles/MintPage.module.css";
 import { ThirdwebProvider } from "@thirdweb-dev/react";
 import { ConnectWallet } from "@thirdweb-dev/react";
 
@@ -8,6 +8,7 @@ export default function Utility() {
     
       <div className={styles.square}>
         <ConnectWallet />
+        <br />
         <div className={styles.title}>Mint Your Master Key</div>
         <br />
 
