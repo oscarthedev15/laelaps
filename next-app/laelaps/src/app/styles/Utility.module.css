@@ -1,0 +1,42 @@
+@font-face {
+  font-family: "main-text";
+  src: url("../fonts/CapitalisTypOasis.ttf");
+}
+
+.background {
+  background-color: rgb(203, 182, 144);
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+.square {
+  display: flex;
+  width: 70%;
+  margin: 0 auto;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-color: #f1cb53;
+  border: 20px;
+}
+
+.textMain {
+  margin: auto;
+  text-align: center;
+  /* font-family: 'Bebas Neue'; */
+  padding: 10px;
+  font-size: 35px;
+  color: black;
+  font-family: "title";
+}
+
+.title {
+    color: purple;
+    font-family: "title";
+    font-size: 45px
+}
