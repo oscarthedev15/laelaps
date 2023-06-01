@@ -2,6 +2,8 @@ import { ThirdwebProvider } from "@thirdweb-dev/react";
 import "../styles/globals.css";
 import Layout from "../Components/Layout";
 import styles from "../styles/layout.module.css";
+import Head from "next/head";
+
 
 // This is the chain your dApp will work on.
 // Change this to the chain your app is built for.
@@ -11,8 +13,12 @@ const activeChain = "ethereum";
 function MyApp({ Component, pageProps }) {
   return (
     <ThirdwebProvider activeChain={activeChain}>
+      <Head>
+        <title>Laelaps</title>
+        <link rel="icon" href="/images/image0.png" />
+      </Head>
       <Layout>
-          <Component {...pageProps} />
+        <Component {...pageProps} />
       </Layout>
     </ThirdwebProvider>
   );
