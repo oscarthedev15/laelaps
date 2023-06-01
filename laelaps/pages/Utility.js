@@ -1,4 +1,4 @@
-import styles from "../src/app/styles/Utility.module.css"
+import styles from "../styles/Utility.module.css"
 export default function Utility() {
   return (
       <div className={styles.square}>

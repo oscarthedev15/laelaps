@@ -1,0 +1,89 @@
+@font-face {
+  font-family: "main-text";
+  src: url("./fonts/CapitalisTypOasis.ttf");
+}
+
+@font-face {
+  font-family: "title";
+  src: url("./fonts/Adonais.ttf");
+}
+
+.AppLogo {
+  height: 50vmin;
+  width: 50vmin;
+  /* padding-bottom: 15px; */
+}
+
+.bigBox {
+  display: flex;
+  justify-content: center;
+}
+
+.title {
+  font-family: "title";
+  font-size: 80px;
+  color: white;
+}
+
+.background {
+  align-items: center;
+  justify-content: center;
+}
+
+.access {
+  justify-content: center;
+  text-align: center;
+  font-family: "title";
+  font-size: 30px;
+  color: #f1cb53;
+  margin-bottom: 10px;
+  text-decoration: none; /* remove underline */
+}
+
+.slogan {
+  text-align: center;
+  align-items: center;
+  align-content: center;
+  font-style: italic;
+  font-family: "Bebas Neue";
+  color: white;
+  text-shadow: 3px 3px black;
+}
+
+.square {
+  display: flex;
+  width: 70%;
+  margin: 0 auto; /* Center horizontally */
+  /* margin-bottom: 2%; */
+  align-items: center;
+  border-color: #f1cb53;
+  border: 20px;
+  justify-content: center;
+}
+
+.textMain {
+  margin: auto;
+  text-align: center;
+  /* font-family: 'Bebas Neue'; */
+  padding: 10px;
+  font-size: 25px;
+  color: black;
+  font-family: "title";
+}
+
+.bigLinks {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.bigLink {
+  font-family: "title";
+  font-size: clamp(30px, 5vw, 50px);
+  color: rgba(139, 0, 0, 1);
+  margin: 30px;
+}
+
+.bigLink:hover {
+  color: whitesmoke;
+}
