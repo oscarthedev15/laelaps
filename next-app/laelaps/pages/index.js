@@ -1,6 +1,7 @@
 import Image from "next/image";
 import styles from "../src/app/styles/page.module.css";
 import Navigation from "../src/app/components/Navbar/MyNavbar";
+import { useRouter } from "next/router";
 
 export default function Home() {
   return (

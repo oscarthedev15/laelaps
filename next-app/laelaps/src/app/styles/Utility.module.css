@@ -3,12 +3,7 @@
   src: url("../fonts/CapitalisTypOasis.ttf");
 }
 
-.background {
-  background-color: rgb(203, 182, 144);
-  align-items: center;
-  justify-content: center;
-  height: 100vh;
-}
+
 
 .square {
   display: flex;
@@ -28,15 +23,24 @@
 .textMain {
   margin: auto;
   text-align: center;
-  /* font-family: 'Bebas Neue'; */
   padding: 10px;
-  font-size: 35px;
   color: black;
   font-family: "title";
+  font-size: 3vw;
 }
 
 .title {
-    color: purple;
-    font-family: "title";
-    font-size: 45px
+  color: purple;
+  font-family: "title";
+  font-size: 4vw; /* Adjust the value as per your preference */
+}
+
+@media (max-width: 768px) {
+  /* Adjust the breakpoint as per your preference */
+  .title {
+    font-size: 15vw; /* Adjust the value as per your preference */
+  }
+  .textMain{
+    font-size: 5vw;
+  }
 }

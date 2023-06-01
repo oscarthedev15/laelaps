@@ -1,7 +1,6 @@
 import styles from "../src/app/styles/Utility.module.css"
 export default function Utility() {
   return (
-    <div className={styles.background}>
       <div className={styles.square}>
         <div className={styles.title}>
           Utility
@@ -14,6 +13,5 @@ export default function Utility() {
           thrives and improves as you fine tune your own methods with him.
         </div>
       </div>
-    </div>
   );
 }
