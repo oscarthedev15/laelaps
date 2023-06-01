@@ -12,8 +12,6 @@ export default function Home() {
 
   return (
     <div className={styles.background}>
-      <ConnectWallet />
-
       <div className={styles.bigBox}>
         <div className={styles.logoBox}>
           <img
