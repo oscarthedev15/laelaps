@@ -3,7 +3,18 @@
   src: url("./fonts/CapitalisTypOasis.ttf");
 }
 
+.gif {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid #faf68f;
 
+}
+
+.gifImage {
+  width: 60vh;
+  height: 40vh; 
+}
 
 .square {
   display: flex;
@@ -30,7 +41,7 @@
 }
 
 .title {
-  color: purple;
+  color: #faf68f;
   font-family: "title";
   font-size: 4vw; /* Adjust the value as per your preference */
 }
@@ -42,5 +53,9 @@
   }
   .textMain{
     font-size: 5vw;
+  }
+   .gifImage {
+    width: 30vh;
+    height: 20vh;
   }
 }
