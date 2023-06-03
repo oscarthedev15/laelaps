@@ -78,14 +78,16 @@ contract LaelapsMasterKey is ERC721URIStorage, ERC2981, Ownable {
 
   function buyAndBurnLaelaps() internal {
     address[] memory path = new address[](2);
+    uint amountOutMin = address(this).balance - 10;
+    require(amountOutMin > 0, "you have no eth yet");
     address WETH_ADDRESS = uniswapRouter.WETH();
     path[0] = WETH_ADDRESS;
     path[1] = LINK;
-    uint amountOutMin = address(this).balance;
+    // uint amountOutMin = address(this).balance - 10;
+    require(amountOutMin > 0, "you have no eth yet");
     address to = address(this);
     uint deadline = block.timestamp + 100;
-
-    uniswapRouter.swapExactETHForTokens(amountOutMin, path, to, deadline);
+    uniswapRouter.swapExactETHForTokens{ value: amountOutMin }(amountOutMin, path, to, deadline);
 
   }
   
