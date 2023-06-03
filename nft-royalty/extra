@@ -1,0 +1,20 @@
+  // function buyAndBurnLaelaps() internal {
+  //   address[] memory path = new address[](2);
+  //   address WETH_ADDRESS = uniswapRouter.WETH();
+  //   path[0] = WETH_ADDRESS;
+  //   path[1] = LINK;
+  //   uint amountOutMin = address(this).balance;
+  //   address to = address(this);
+  //   uint deadline = block.timestamp + 100;
+
+  //   uniswapRouter.swapExactETHForTokens(amountOutMin, path, to, deadline);
+
+  //}
+
+    // IUniswapV2Router02 private uniswapRouter;
+
+
+  // address public LAELAPS_ADDRESS = 0x811a10657440928c9cda3580eb54f271ac4b9a19;
+
+
+    // uniswapRouter = IUniswapV2Router02(UNISWAP_ROUTER_ADDRESS);
