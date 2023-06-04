@@ -108,7 +108,7 @@ export default function Utility() {
       <br />
       <div className={styles.valuesContainer}>
         {Object.entries(contractVals).map(([key, value]) => (
-          <div className={styles.box}>
+          <div key={key} className={styles.box}>
             {key}: {value}
           </div>
         ))}
