@@ -45,6 +45,17 @@ module.exports = {
       timeoutBlocks: 200,
       skipDryRun: true,
     },
+    mainnet: {
+      provider: () =>
+        new HDWalletProvider(
+          mnemonic,
+          `https://mainnet.infura.io/v3/80ff58b9b8aa43ac87a68b3012e50134`
+        ),
+      gas: 5500000,
+      network_id: 1,
+      confirmations: 1, // # of confs to wait between deployments. (default: 0)
+      timeoutBlocks: 200, // # of blocks before a deployment times out  (minimum/default: 50)
+    },
   },
 
   // Set default mocha options here, use special reporters, etc.
