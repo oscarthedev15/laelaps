@@ -47,7 +47,6 @@ export default function Home() {
         <a
           href="https://guild.xyz/laelaps-beta#"
           className={styles.bigLink}
-          onClick={(e) => handleLinkClick(e, "/MintPage")}
           target="_blank"
         >
           Access Here
@@ -55,7 +54,6 @@ export default function Home() {
         <a
           href="https://www.youtube.com/watch?v=4H7SeZAb_EM"
           className={styles.bigLink}
-          onClick={(e) => handleLinkClick(e, "/MintPage")}
           target="_blank"
         >
           Watch Me
