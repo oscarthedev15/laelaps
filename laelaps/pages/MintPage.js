@@ -12,10 +12,6 @@ import { useState, useEffect } from "react";
 
 const contractAddress = "0x691c77F69a6AE05F5C8cC9f46d7E46Ce97FA2F3B";
 
-function receipt(txnReceipt) {
-  const txnHash = txnReceipt["TransactionHash"];
-}
-
 async function contractPriceGridValues() {
   const values = {};
   const provider = new ethers.providers.Web3Provider(window.ethereum);
@@ -25,8 +21,11 @@ async function contractPriceGridValues() {
     contractAbi,
     signer
   );
+
   const mintCost = await contractInstance.mintCost();
-  const mintCostEth = ethers.utils.formatEther(mintCost.toNumber());
+  console.log(mintCost);
+  const mintCostEth = ethers.utils.formatEther(mintCost);
+  console.log(mintCostEth)
   values["Mint Cost"] = mintCostEth;
   const percentageBig = await contractInstance.percentage();
   const percentage = percentageBig.toNumber();
@@ -42,22 +41,26 @@ export default function Utility() {
   const [contractVals, setContractVals] = useState({});
   const switchChain = useSwitchChain();
 
-  useEffect(() => {
+useEffect(() => {
   async function fetchData() {
     try {
-      if (isMismatched) {
+      if (isMismatched && userAddress) {
         switchChain(Ethereum.chainId);
+        setLoading(false);
+        console.log(values);
+      } else if (!isMismatched && userAddress) {
+        const values = await contractPriceGridValues();
+        setContractVals(values);
       }
-      const values = await contractPriceGridValues();
-      setContractVals(values);
-      console.log(values);
     } catch (err) {
       alert("Error switching network");
     }
   }
 
-  fetchData();
-}, [isMismatched, switchChain]);
+  if (userAddress) {
+    fetchData();
+  }
+}, [isMismatched, switchChain, userAddress]);
 
   async function mintNFT(event) {
     if (!isMismatched && userAddress) {
@@ -84,7 +87,8 @@ export default function Utility() {
         );
         setLoading(false);
       } catch (err) {
-        alert("Error in Mint");
+        alert("Error in Mint", err);
+        console.log(err)
         setLoading(false);
       }
     } else if (!isMismatched && userAddress) {
