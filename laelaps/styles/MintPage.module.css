@@ -65,12 +65,13 @@
 }
 
 .mintButton {
-  background-color: #faf68f;
-  height: auto;
-  color: black;
-  font-family: "title";
-  font-size: 8vh;
-  cursor: pointer;
+  font-family: "title" !important;
+  background-color: #faf68f !important;
+  height: auto !important;
+  color: black !important;
+  font-family: "title" !important;
+  font-size: 6vh !important;
+  cursor: pointer !important;
 }
 
 .mintButton:hover {

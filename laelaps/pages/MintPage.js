@@ -5,7 +5,6 @@ import { Ethereum } from "@thirdweb-dev/chains";
 import { useNetworkMismatch } from "@thirdweb-dev/react";
 import {
   useAddress,
-  useSigner,
   useContractWrite,
   useContract,
   Web3Button,
@@ -23,11 +22,11 @@ export default function Utility() {
   const [loading, setLoading] = useState(false);
   const [contractVals, setContractVals] = useState({});
   const switchChain = useSwitchChain();
-  const { contract } = useContract(
-    contractAddress,
-    contractAbi
+  const { contract } = useContract(contractAddress, contractAbi);
+  const { mutateAsync, isLoading, error } = useContractWrite(
+    contract,
+    "mintNFT"
   );
-  const { mutateAsync, isLoading, error } = useContractWrite(contract, "mintNFT");
 
   useEffect(() => {
     async function fetchData() {
@@ -135,13 +134,22 @@ export default function Utility() {
             value: ethers.utils.parseUnits(contractVals["Mint Cost"], "ether"), // send 0.1 ether with the contract call
           })
         }
-        onError={(error) => alert("Error in mint")}
+        onError={(error) => {
+          if (error.message.includes("Insufficient funds")) {
+            alert("Insufficient user funds");
+          } else {
+            alert("Error in mint");
+            console.log("*********");
+            console.log(error);
+          }
+        }}
         onSuccess={(result) =>
           alert(
             "Mint Successful! View your NFT on Opensea! Token address: ",
             contractAddress
           )
         }
+        className={styles.mintButton}
       >
         Send Transaction
       </Web3Button>
