@@ -12,7 +12,7 @@
 }
 
 .gifImage {
-  width: 50vh;
+  width: 30vh;
   height: 30vh; 
 }
 
@@ -51,27 +51,30 @@
   .title {
     font-size: 7vw; /* Adjust the value as per your preference */
   }
-  .textMain{
+  .textMain {
     font-size: 5vw;
   }
-   .gifImage {
-    width: 20vh;
-    height: 10vh;
+  .gifImage {
+    width: 25vh;
+    height: 25vh;
+  }
+  .mintButton {
+    font-size: 6vh !important; /* Added !important to override conflicting declarations */
+    height: 6vh;
   }
 
-  .mintButton {
-    font-size: 5vh;
-    height: 6vh;
+  .box {
+    font-size: 2vh;
   }
 }
 
 .mintButton {
-    background-color: #faf68f;
-    height: 10vh;
-    color: black;
-    font-family: "title";
-    font-size: 8vh;
-    cursor: pointer;
+  background-color: #faf68f;
+  height: auto;
+  color: black;
+  font-family: "title";
+  font-size: 8vh;
+  cursor: pointer;
 }
 
 .mintButton:hover {
@@ -89,7 +92,6 @@
 
 .valuesContainer {
     white-space: nowrap;
-
 }
 
 .box {

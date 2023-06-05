@@ -111,16 +111,17 @@ useEffect(() => {
       )}
       <br />
       <div className={styles.valuesContainer}>
-        {Object.entries(contractVals).map(([key, value]) => (
-          <div key={key} className={styles.box}>
-            {key}: {value}
-          </div>
-        ))}
+        <div className={styles.box}>
+          Mint Cost: {contractVals["Mint Cost"]} Eth
+        </div>
+        <div className={styles.box}>
+          Percent Laelaps Buy: {contractVals["Percentage"]}
+        </div>
       </div>
       <br />
       <div className={styles.gif}>
         <img
-          src="https://cloudflare-ipfs.com/ipfs/QmXT48ANVqBHMbCP9kYDtVezh6MqPLPKw95oETKKdxcdA6"
+          src="https://cloudflare-ipfs.com/ipfs/QmWeZKx5Z4wHjtUBeATj1WVxnYhMPkiMBZWo1uxZg1sYA6"
           className={styles.gifImage}
         />
       </div>
