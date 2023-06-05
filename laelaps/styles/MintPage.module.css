@@ -55,7 +55,7 @@
     height: 25vh;
   }
   .mintButton {
-    font-size: 6vh !important; /* Added !important to override conflicting declarations */
+    font-size: 4vh !important; /* Added !important to override conflicting declarations */
     height: 6vh;
   }
 
@@ -70,7 +70,7 @@
   height: auto !important;
   color: black !important;
   font-family: "title" !important;
-  font-size: 6vh !important;
+  font-size: 4vh !important ;
   cursor: pointer !important;
 }
 
