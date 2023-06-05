@@ -130,7 +130,6 @@ export default function Utility() {
         action={() =>
           mutateAsync({
             args: [userAddress],
-            gasLimit: 1000000, // override default gas limit
             value: ethers.utils.parseUnits(contractVals["Mint Cost"], "ether"), // send 0.1 ether with the contract call
           })
         }
