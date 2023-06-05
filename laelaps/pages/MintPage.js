@@ -3,11 +3,9 @@ import { ConnectWallet } from "@thirdweb-dev/react";
 import { useSwitchChain } from "@thirdweb-dev/react";
 import { Ethereum } from "@thirdweb-dev/chains";
 import { useNetworkMismatch } from "@thirdweb-dev/react";
-import { ThirdwebSDK, getContract } from "@thirdweb-dev/sdk";
 import { useAddress } from "@thirdweb-dev/react";
 import contractAbi from "../contracts/MasterKey.json";
 import { ethers, toNumber } from "ethers";
-import CircularProgress from "@mui/material/CircularProgress";
 import { useState, useEffect } from "react";
 
 const contractAddress = "0x691c77F69a6AE05F5C8cC9f46d7E46Ce97FA2F3B";
@@ -45,18 +43,24 @@ useEffect(() => {
   async function fetchData() {
     try {
       if (isMismatched && userAddress) {
-        switchChain(Ethereum.chainId);
-        setLoading(false);
-        console.log(values);
+        let isSwitched = false;
+        try {
+          isSwitched = await switchChain(Ethereum.chainId);
+        } catch (err) {
+          console.log(err);
+        }
+        if (isSwitched) {
+          const values = await contractPriceGridValues();
+          setContractVals(values);
+        }
       } else if (!isMismatched && userAddress) {
         const values = await contractPriceGridValues();
         setContractVals(values);
       }
     } catch (err) {
-      alert("Error switching network");
+      alert("Error switching network", err);
     }
   }
-
   if (userAddress) {
     fetchData();
   }
