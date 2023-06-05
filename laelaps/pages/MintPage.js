@@ -3,34 +3,19 @@ import { ConnectWallet } from "@thirdweb-dev/react";
 import { useSwitchChain } from "@thirdweb-dev/react";
 import { Ethereum } from "@thirdweb-dev/chains";
 import { useNetworkMismatch } from "@thirdweb-dev/react";
-import { useAddress } from "@thirdweb-dev/react";
+import {
+  useAddress,
+  useSigner,
+  useContractWrite,
+  useContract,
+  Web3Button,
+} from "@thirdweb-dev/react";
 import contractAbi from "../contracts/MasterKey.json";
 import { ethers, toNumber } from "ethers";
 import { useState, useEffect } from "react";
+import { ThirdwebSDK } from "@thirdweb-dev/sdk";
 
 const contractAddress = "0x691c77F69a6AE05F5C8cC9f46d7E46Ce97FA2F3B";
-
-async function contractPriceGridValues() {
-  const values = {};
-  const provider = new ethers.providers.Web3Provider(window.ethereum);
-  const signer = provider.getSigner();
-  const contractInstance = new ethers.Contract(
-    contractAddress,
-    contractAbi,
-    signer
-  );
-
-  const mintCost = await contractInstance.mintCost();
-  console.log(mintCost);
-  const mintCostEth = ethers.utils.formatEther(mintCost);
-  console.log(mintCostEth);
-  values["Mint Cost"] = mintCostEth;
-  const percentageBig = await contractInstance.percentage();
-  const percentage = percentageBig.toNumber();
-  values["Percentage"] = percentage + "%";
-  console.log(values);
-  return values;
-}
 
 export default function Utility() {
   const isMismatched = useNetworkMismatch();
@@ -38,6 +23,11 @@ export default function Utility() {
   const [loading, setLoading] = useState(false);
   const [contractVals, setContractVals] = useState({});
   const switchChain = useSwitchChain();
+  const { contract } = useContract(
+    contractAddress,
+    contractAbi
+  );
+  const { mutateAsync, isLoading, error } = useContractWrite(contract, "mintNFT");
 
   useEffect(() => {
     async function fetchData() {
@@ -47,6 +37,7 @@ export default function Utility() {
           try {
             isSwitched = await switchChain(Ethereum.chainId);
           } catch (err) {
+            alert("Unable to switch networks");
             console.log(err);
           }
           if (isSwitched) {
@@ -66,24 +57,45 @@ export default function Utility() {
     }
   }, [isMismatched, switchChain, userAddress]);
 
+  async function contractPriceGridValues() {
+    try {
+      const sdk = new ThirdwebSDK(Ethereum);
+      const values = {};
+      const contractInstance = await sdk.getContract(
+        contractAddress,
+        contractAbi
+      );
+
+      const mintCost = await contractInstance.call("mintCost");
+      const mintCostEth = ethers.utils.formatEther(mintCost);
+      values["Mint Cost"] = mintCostEth;
+      const percentageBig = await contractInstance.call("percentage");
+      const percentage = percentageBig.toNumber();
+      values["Percentage"] = percentage + "%";
+      return values;
+    } catch (err) {
+      console.log(err);
+      return {};
+    }
+  }
+
   async function mintNFT(event) {
     if (!isMismatched && userAddress) {
-      console.log(userAddress);
-      console.log(isMismatched);
       try {
         setLoading(true);
-        const provider = new ethers.providers.Web3Provider(window.ethereum);
-        const gasPrice = await provider.getGasPrice();
-        const signer = provider.getSigner();
-        const contractInstance = new ethers.Contract(
-          contractAddress,
-          contractAbi,
-          signer
-        );
-        const txn = await contractInstance.mintNFT(userAddress, {
-          value: ethers.utils.parseUnits(contractVals["Mint Cost"], "ether"),
-          gasPrice: gasPrice,
-        });
+        // const provider = new ethers.providers.Web3Provider(window.ethereum);
+        // const gasPrice = await provider.getGasPrice();
+        // const signer = provider.getSigner();
+        // const contractInstance = new ethers.Contract(
+        //   contractAddress,
+        //   contractAbi,
+        //   signer
+        // );
+        //  const txn = await contractInstance.mintNFT(userAddress, {
+        //    value: ethers.utils.parseUnits(contractVals["Mint Cost"], "ether"),
+        //    gasPrice: gasPrice,
+        //  });
+
         const recepit = await txn.wait();
 
         console.log(recepit);
@@ -93,10 +105,7 @@ export default function Utility() {
         );
         setLoading(false);
       } catch (err) {
-        if (
-          err.code === -32000 &&
-          err.message === "insufficient funds for transfer"
-        ) {
+        if (err.message.includes("insufficient funds for transfer")) {
           alert("Insufficient user funds for transaction!");
         } else {
           alert("Error in Mint", err);
@@ -115,13 +124,28 @@ export default function Utility() {
     <div className={styles.square}>
       <ConnectWallet />
       <br />
-      {loading ? (
-        <div className={styles.loadingText}>MINTING....</div>
-      ) : (
-        <button onClick={mintNFT} className={styles.mintButton}>
-          MINT YOURS HERE!
-        </button>
-      )}
+
+      <Web3Button
+        contractAddress={contractAddress}
+        contractAbi={contractAbi}
+        action={() =>
+          mutateAsync({
+            args: [userAddress],
+            gasLimit: 1000000, // override default gas limit
+            value: ethers.utils.parseUnits(contractVals["Mint Cost"], "ether"), // send 0.1 ether with the contract call
+          })
+        }
+        onError={(error) => alert("Error in mint")}
+        onSuccess={(result) =>
+          alert(
+            "Mint Successful! View your NFT on Opensea! Token address: ",
+            contractAddress
+          )
+        }
+      >
+        Send Transaction
+      </Web3Button>
+
       <br />
       <div className={styles.valuesContainer}>
         <div className={styles.box}>
