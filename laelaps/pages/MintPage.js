@@ -71,6 +71,7 @@ export default function Utility() {
       const percentageBig = await contractInstance.call("percentage");
       const percentage = percentageBig.toNumber();
       values["Percentage"] = percentage + "%";
+      console.log(values["Mint Cost"]);
       return values;
     } catch (err) {
       console.log(err);
@@ -123,35 +124,34 @@ export default function Utility() {
     <div className={styles.square}>
       <ConnectWallet />
       <br />
-
-      <Web3Button
-        contractAddress={contractAddress}
-        contractAbi={contractAbi}
-        action={() =>
-          mutateAsync({
-            args: [userAddress],
-            value: ethers.utils.parseUnits(contractVals["Mint Cost"], "ether"), // send 0.1 ether with the contract call
-          })
-        }
-        onError={(error) => {
-          if (error.message.includes("Insufficient funds")) {
-            alert("Insufficient user funds");
-          } else {
-            alert("Error in mint");
-            console.log("*********");
-            console.log(error);
+      {contractVals && (
+        <Web3Button
+          contractAddress={contractAddress}
+          contractAbi={contractAbi}
+          action={(contract) =>
+            contract.call("mintNFT", [userAddress], {value : ethers.utils.parseUnits(contractVals["Mint Cost"],
+                  "ether")})
+          } 
+          onError={(error) => {
+            if (error.message.includes("Insufficient funds")) {
+              alert("Insufficient user funds");
+            } else {
+              alert("Error in mint");
+              console.log("*********");
+              console.log(error);
+            }
+          }}
+          onSuccess={(result) =>
+            alert(
+              "Mint Successful! View your NFT on Opensea! Token address: ",
+              contractAddress
+            )
           }
-        }}
-        onSuccess={(result) =>
-          alert(
-            "Mint Successful! View your NFT on Opensea! Token address: ",
-            contractAddress
-          )
-        }
-        className={styles.mintButton}
-      >
-        MINT MASTER KEY
-      </Web3Button>
+          className={styles.mintButton}
+        >
+          MINT MASTER KEY
+        </Web3Button>
+      )}
 
       <br />
       <div className={styles.valuesContainer}>
