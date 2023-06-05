@@ -151,7 +151,7 @@ export default function Utility() {
         }
         className={styles.mintButton}
       >
-        Send Transaction
+        MINT MASTER KEY
       </Web3Button>
 
       <br />
