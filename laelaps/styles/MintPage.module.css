@@ -23,10 +23,6 @@
   align-items: center;
   justify-content: center;
   flex-direction: column;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
   border-color: #f1cb53;
   border: 20px;
 }

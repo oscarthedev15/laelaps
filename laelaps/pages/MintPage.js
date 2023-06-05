@@ -23,12 +23,12 @@ async function contractPriceGridValues() {
   const mintCost = await contractInstance.mintCost();
   console.log(mintCost);
   const mintCostEth = ethers.utils.formatEther(mintCost);
-  console.log(mintCostEth)
+  console.log(mintCostEth);
   values["Mint Cost"] = mintCostEth;
   const percentageBig = await contractInstance.percentage();
   const percentage = percentageBig.toNumber();
   values["Percentage"] = percentage + "%";
-  console.log(values)
+  console.log(values);
   return values;
 }
 
@@ -39,32 +39,32 @@ export default function Utility() {
   const [contractVals, setContractVals] = useState({});
   const switchChain = useSwitchChain();
 
-useEffect(() => {
-  async function fetchData() {
-    try {
-      if (isMismatched && userAddress) {
-        let isSwitched = false;
-        try {
-          isSwitched = await switchChain(Ethereum.chainId);
-        } catch (err) {
-          console.log(err);
-        }
-        if (isSwitched) {
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        if (isMismatched && userAddress) {
+          let isSwitched = false;
+          try {
+            isSwitched = await switchChain(Ethereum.chainId);
+          } catch (err) {
+            console.log(err);
+          }
+          if (isSwitched) {
+            const values = await contractPriceGridValues();
+            setContractVals(values);
+          }
+        } else if (!isMismatched && userAddress) {
           const values = await contractPriceGridValues();
           setContractVals(values);
         }
-      } else if (!isMismatched && userAddress) {
-        const values = await contractPriceGridValues();
-        setContractVals(values);
+      } catch (err) {
+        alert("Error switching network", err);
       }
-    } catch (err) {
-      alert("Error switching network", err);
     }
-  }
-  if (userAddress) {
-    fetchData();
-  }
-}, [isMismatched, switchChain, userAddress]);
+    if (userAddress) {
+      fetchData();
+    }
+  }, [isMismatched, switchChain, userAddress]);
 
   async function mintNFT(event) {
     if (!isMismatched && userAddress) {
@@ -73,6 +73,7 @@ useEffect(() => {
       try {
         setLoading(true);
         const provider = new ethers.providers.Web3Provider(window.ethereum);
+        const gasPrice = await provider.getGasPrice();
         const signer = provider.getSigner();
         const contractInstance = new ethers.Contract(
           contractAddress,
@@ -81,6 +82,7 @@ useEffect(() => {
         );
         const txn = await contractInstance.mintNFT(userAddress, {
           value: ethers.utils.parseUnits(contractVals["Mint Cost"], "ether"),
+          gasPrice: gasPrice,
         });
         const recepit = await txn.wait();
 
@@ -91,8 +93,15 @@ useEffect(() => {
         );
         setLoading(false);
       } catch (err) {
-        alert("Error in Mint", err);
-        console.log(err)
+        if (
+          err.code === -32000 &&
+          err.message === "insufficient funds for transfer"
+        ) {
+          alert("Insufficient user funds for transaction!");
+        } else {
+          alert("Error in Mint", err);
+          console.log(err);
+        }
         setLoading(false);
       }
     } else if (!isMismatched && userAddress) {
@@ -134,8 +143,8 @@ useEffect(() => {
       <br />
 
       <div className={styles.textMain}>
-        Coming Soon! Every Master Key purchase will automatically trigger a
-        purchase of $LAELAPS and immediately burn the purchased tokens.
+        Every Master Key purchase will automatically trigger a purchase of
+        $LAELAPS and immediately burn the purchased tokens.
       </div>
     </div>
   );
