@@ -27,11 +27,12 @@ export default function Home() {
       <div className={styles.access}></div>
       <div className={styles.square}>
         <div className={styles.textMain}>
-          Behold, the mighty Laelaps! Descended from the hounds of the gods,
-          this magnificent creature has the speed and strength to catch anything
-          it pursues. With the agility of Hermes and the power of Zeus, Laelaps
-          is a force to be reckoned with. So beware, for if you find yourself on
-          the run from Laelaps, there is no escape from its unrelenting pursuit.
+          Witness the awe-inspiring presence of Laelaps! Descended from the
+          divine hounds, this majestic creature possesses unparalleled speed and
+          strength, capable of capturing anything it sets its sights on. With
+          the agility akin to Hermes and the might of Zeus, Laelaps emerges as
+          an unstoppable force. Take heed, for if you find yourself fleeing from
+          Laelaps, there is no evading its relentless pursuit.
         </div>
       </div>
       <br></br>
