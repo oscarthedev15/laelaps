@@ -72,6 +72,7 @@ export async function validateAccount(address, bot, chatId) {
       return balances;
     }
   } else {
+    console.log("Here")
     return balances;
   }
 }
@@ -95,7 +96,7 @@ export async function getBalances(address) {
     provider
   );
   const masterKeyBalance = await masterKeyContract.balanceOf(address);
-  balances["masterKey"] = ethers.utils.formatEther(masterKeyBalance);
+  balances["masterKey"] = masterKeyBalance.toNumber();
 
   return balances;
 }
