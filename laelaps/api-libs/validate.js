@@ -71,14 +71,12 @@ export async function validateAccount(address, bot, chatId) {
         });
       return balances;
     }
-  }
-  else {
-    return balances
+  } else {
+    return balances;
   }
 }
 
 export async function getBalances(address) {
-  //   let activeBot = noBot[bot];
   const balances = {};
   const provider = new ethers.providers.JsonRpcProvider(
     `https://mainnet.infura.io/v3/${process.env.INFURA}`
@@ -89,7 +87,7 @@ export async function getBalances(address) {
     provider
   );
   const laelapsBalance = await laelapsContract.balanceOf(address);
-  balances["laelaps"] = laelapsBalance.toNumber();
+  balances["laelaps"] = ethers.utils.formatEther(laelapsBalance);
 
   const masterKeyContract = new ethers.Contract(
     laelapsKeysCA,
@@ -97,7 +95,7 @@ export async function getBalances(address) {
     provider
   );
   const masterKeyBalance = await masterKeyContract.balanceOf(address);
-  balances["masterKey"] = masterKeyBalance.toNumber();
+  balances["masterKey"] = ethers.utils.formatEther(masterKeyBalance);
 
   return balances;
 }
