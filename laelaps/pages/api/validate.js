@@ -7,7 +7,9 @@ export default async function handler(req, res) {
   }
 
   const { userAddress, bot, chatId } = req.body;
+  
   const balances = await validateAccount(userAddress, bot, chatId);
+  
   res.json(balances);
 
 }
