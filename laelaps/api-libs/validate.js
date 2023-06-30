@@ -5,7 +5,6 @@ import contractAbi721 from "../contracts/MasterKey.json";
 import mongoose from "mongoose";
 import Chat from "../models/chat.js";
 
-
 mongoose.set("strictQuery", true);
 //mongoose.set('debug', true)
 mongoose
@@ -45,36 +44,40 @@ const noBot = {
 
 export async function validateAccount(address, bot, chatId) {
   const balances = await getBalances(address);
-  console.log(balances);
-  let activeBot = noBot[bot];
-  if (balances.laelaps < 5000000 && balances.masterKey < 1) {
-    await activeBot.telegram.sendMessage(
-      chatId,
-      `Wallet doesn't hold enough tokens.`
-    );
-    return balances;
-  } else {
-    await activeBot.telegram.sendMessage(
-      chatId,
-      `Account has been activated. Use /hunt to get started`
-    );
-    let chat = new Chat({
-      chatId: chatId,
-      tier: 3,
-      address: address,
-      bot: bot,
-    });
-    await chat
-      .save()
-      .then((result) => {})
-      .catch((err) => {
-        console.log(err);
+  if (bot && chatId) {
+    let activeBot = noBot[bot];
+    if (balances.laelaps < 5000000 && balances.masterKey < 1) {
+      await activeBot.telegram.sendMessage(
+        chatId,
+        `Wallet doesn't hold enough tokens.`
+      );
+      return balances;
+    } else {
+      await activeBot.telegram.sendMessage(
+        chatId,
+        `Account has been activated. Use /hunt to get started`
+      );
+      let chat = new Chat({
+        chatId: chatId,
+        tier: 3,
+        address: address,
+        bot: bot,
       });
-    return balances;
+      await chat
+        .save()
+        .then((result) => {})
+        .catch((err) => {
+          console.log(err);
+        });
+      return balances;
+    }
+  }
+  else {
+    return balances
   }
 }
 
-export async function getBalances(address, chatId, bot) {
+export async function getBalances(address) {
   //   let activeBot = noBot[bot];
   const balances = {};
   const provider = new ethers.providers.JsonRpcProvider(

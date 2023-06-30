@@ -40,7 +40,7 @@ const chatSchema = new Schema(
       required: true,
     },
     filters: {
-      type: Object(),
+      type: Object,
       required: true,
       default: {
         burn: false,
@@ -54,22 +54,22 @@ const chatSchema = new Schema(
       },
     },
     blacklisted: {
-      type: Object(),
+      type: Object,
       required: true,
       default: { ca: [], wallet: [], keyword: [], deployer: [], checksum: [] },
     },
     favorites: {
-      type: Object(),
+      type: Object,
       required: true,
-      default: Object(),
+      default: Object,
     },
     fundingSourceSelected: {
-      type: Array(),
+      type: Array,
       required: true,
       default: ["all"],
     },
     presetFilter: {
-      type: Array(),
+      type: Array,
       required: true,
       default: [],
     },
