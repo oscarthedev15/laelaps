@@ -18,7 +18,7 @@ export default function Home() {
             src="./images/image0.png"
             className={styles.AppLogo}
             alt="logo"
-          />
+          /> 
         </div>
       </div>
       <div className={styles.bigBox}>
