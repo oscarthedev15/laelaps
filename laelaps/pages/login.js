@@ -42,7 +42,7 @@ export default function Utility() {
       <ConnectWallet />
       <br/>
       <div className={styles.valuesContainer}>
-        <div className={styles.box}>Laelaps Balance: {balances["laelaps"]} Eth</div>
+        <div className={styles.box}>Laelaps Balance: {balances["laelaps"]} </div>
         <div className={styles.box}>
           Master Key Balance: {balances["masterKey"]}
         </div>

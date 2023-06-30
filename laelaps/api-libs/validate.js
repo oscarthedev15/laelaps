@@ -72,7 +72,6 @@ export async function validateAccount(address, bot, chatId) {
       return balances;
     }
   } else {
-    console.log("Here")
     return balances;
   }
 }
