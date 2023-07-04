@@ -9,12 +9,15 @@ import {
   useContract,
   Web3Button,
 } from "@thirdweb-dev/react";
-import contractAbi from "../contracts/MasterKey.json";
+// import contractAbi from "../contracts/MasterKey.json";
+import contractAbi from "../contracts/MasterKey2.json";
+
 import { ethers, toNumber } from "ethers";
 import { useState, useEffect } from "react";
 import { ThirdwebSDK } from "@thirdweb-dev/sdk";
 
-const contractAddress = "0x691c77F69a6AE05F5C8cC9f46d7E46Ce97FA2F3B";
+// const contractAddress = "0x691c77F69a6AE05F5C8cC9f46d7E46Ce97FA2F3B";
+const contractAddress = "0x992d6FBe83f3f4c938F687A6676a1155A523A20b";
 
 export default function Utility() {
   const isMismatched = useNetworkMismatch();
@@ -25,7 +28,7 @@ export default function Utility() {
   const { contract } = useContract(contractAddress, contractAbi);
   const { mutateAsync, isLoading, error } = useContractWrite(
     contract,
-    "mintNFT"
+    "mintSingle"
   );
 
   useEffect(() => {
@@ -65,12 +68,12 @@ export default function Utility() {
         contractAbi
       );
 
-      const mintCost = await contractInstance.call("mintCost");
+      const mintCost = await contractInstance.call("PRICE_PER_TOKEN");
       const mintCostEth = ethers.utils.formatEther(mintCost);
       values["Mint Cost"] = mintCostEth;
-      const percentageBig = await contractInstance.call("percentage");
-      const percentage = percentageBig.toNumber();
-      values["Percentage"] = percentage + "%";
+      const percentageBig = await contractInstance.call("totalSupply");
+      const percentage = 150 - percentageBig.toNumber();
+      values["Percentage"] = percentage ;
       console.log(values["Mint Cost"]);
       return values;
     } catch (err) {
@@ -122,16 +125,20 @@ export default function Utility() {
 
   return (
     <div className={styles.square}>
-      {/* <ConnectWallet />
+      <ConnectWallet />
       <br />
       {contractVals && (
         <Web3Button
           contractAddress={contractAddress}
           contractAbi={contractAbi}
           action={(contract) =>
-            contract.call("mintNFT", [userAddress], {value : ethers.utils.parseUnits(contractVals["Mint Cost"],
-                  "ether")})
-          } 
+            contract.call("mintSingle", [userAddress], {
+              value: ethers.utils.parseUnits(
+                contractVals["Mint Cost"],
+                "ether"
+              ),
+            })
+          }
           onError={(error) => {
             if (error.message.includes("Insufficient funds")) {
               alert("Insufficient user funds");
@@ -159,53 +166,17 @@ export default function Utility() {
           Mint Cost: {contractVals["Mint Cost"]} Eth
         </div>
         <div className={styles.box}>
-          Percent Laelaps Buy: {contractVals["Percentage"]}
+          Remaining Keys: {contractVals["Percentage"]}
         </div>
       </div>
       <br />
-      
       <br />
       <div className={styles.title}>Mint Your Master Key</div>
-      <br /> */}
+      <br />
       <div className={styles.textMain}>
-        Master Key mint paused! Announcement coming soon....
+        Enjoy unparreleld access to the best trading bot around. Laelaps never
+        fails.
       </div>
-        <div className={styles.gifRow}>
-          <div className={styles.gif}>
-            <img
-              src="https://cloudflare-ipfs.com/ipfs/QmRLrqVV4mzQyEZfJYv4KjfwUxZAxeh7EEMTkghPwcH5Hf"
-              className={styles.gifImage}
-            />
-          </div>
-
-          <div className={styles.gif}>
-            <img
-              src="https://cloudflare-ipfs.com/ipfs/QmW8Tow79oWqyGBYTe6HUmT8zLqb39oVqRFqBRL2imS28z"
-              className={styles.gifImage}
-            />
-          </div>
-
-          <div className={styles.gif}>
-            <img
-              src="https://cloudflare-ipfs.com/ipfs/QmWdjfJb4z3m9YkEvvRb3DY85KCkFhSEGF6YHVWB9qZe8B"
-              className={styles.gifImage}
-            />
-          </div>
-
-          <div className={styles.gif}>
-            <img
-              src="https://cloudflare-ipfs.com/ipfs/QmaVmzp7Ln8YQbZwu5ahqfWdjdcn9KEdDBctmMMAng2RfJ"
-              className={styles.gifImage}
-            />
-          </div>
-
-          <div className={styles.gif}>
-            <img
-              src="https://cloudflare-ipfs.com/ipfs/QmZ4reQiStQACTLYncxo7nsBHrB4hC1kzweu16b7SjeHWY"
-              className={styles.gifImage}
-            />
-          </div>
-        </div>
     </div>
   );
 }
