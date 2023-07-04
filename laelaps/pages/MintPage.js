@@ -122,7 +122,7 @@ export default function Utility() {
 
   return (
     <div className={styles.square}>
-      <ConnectWallet />
+      {/* <ConnectWallet />
       <br />
       {contractVals && (
         <Web3Button
@@ -171,11 +171,10 @@ export default function Utility() {
       </div>
       <br />
       <div className={styles.title}>Mint Your Master Key</div>
-      <br />
+      <br /> */}
 
       <div className={styles.textMain}>
-        Every Master Key purchase will automatically trigger a purchase of
-        $LAELAPS and immediately burn the purchased tokens.
+        Master Key mint paused! Announcement coming soon....
       </div>
     </div>
   );
