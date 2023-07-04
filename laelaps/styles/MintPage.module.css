@@ -102,3 +102,10 @@
   padding: 8px;
 
 }
+
+
+.gifRow {
+      display: flex; /* Use flexbox to create a row layout */
+  justify-content: space-between;
+
+}

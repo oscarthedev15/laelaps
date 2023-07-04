@@ -163,15 +163,39 @@ export default function Utility() {
         </div>
       </div>
       <br />
-      <div className={styles.gif}>
-        <img
-          src="https://cloudflare-ipfs.com/ipfs/QmWeZKx5Z4wHjtUBeATj1WVxnYhMPkiMBZWo1uxZg1sYA6"
-          className={styles.gifImage}
-        />
-      </div>
+      
       <br />
       <div className={styles.title}>Mint Your Master Key</div>
       <br /> */}
+      <div className={styles.gifRow}>
+        <div className={styles.gif}>
+          <img
+            src="https://cloudflare-ipfs.com/ipfs/QmRLrqVV4mzQyEZfJYv4KjfwUxZAxeh7EEMTkghPwcH5Hf"
+            className={styles.gifImage}
+          />
+        </div>
+
+        <div className={styles.gif}>
+          <img
+            src="https://cloudflare-ipfs.com/ipfs/QmW8Tow79oWqyGBYTe6HUmT8zLqb39oVqRFqBRL2imS28z"
+            className={styles.gifImage}
+          />
+        </div>
+
+        <div className={styles.gif}>
+          <img
+            src="https://cloudflare-ipfs.com/ipfs/QmWdjfJb4z3m9YkEvvRb3DY85KCkFhSEGF6YHVWB9qZe8B"
+            className={styles.gifImage}
+          />
+        </div>
+
+        <div className={styles.gif}>
+          <img
+            src="https://cloudflare-ipfs.com/ipfs/QmaVmzp7Ln8YQbZwu5ahqfWdjdcn9KEdDBctmMMAng2RfJ"
+            className={styles.gifImage}
+          />
+        </div>
+      </div>
 
       <div className={styles.textMain}>
         Master Key mint paused! Announcement coming soon....
