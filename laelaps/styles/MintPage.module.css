@@ -7,7 +7,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 2px solid #faf68f;
+  /* border: 2px solid #faf68f; */
 
 }
 
@@ -30,7 +30,8 @@
 .textMain {
   margin: auto;
   text-align: center;
-  padding: 10px;
+  padding: 50px;
+  padding-bottom: 90px;
   color: black;
   font-family: "title";
   font-size: 3vw;
@@ -51,8 +52,8 @@
     font-size: 5vw;
   }
   .gifImage {
-    width: 25vh;
-    height: 25vh;
+    width: 20vh;
+    height: 20vh;
   }
   .mintButton {
     font-size: 4vh !important; /* Added !important to override conflicting declarations */
@@ -62,6 +63,12 @@
   .box {
     font-size: 2vh;
   }
+
+  .gifRow {
+  display: flex; /* Use flexbox to create a row layout */
+  flex-direction: column; /* Allow items to wrap onto multiple lines */
+    background-color: black;
+}
 }
 
 .mintButton {
@@ -105,7 +112,8 @@
 
 
 .gifRow {
-      display: flex; /* Use flexbox to create a row layout */
+  display: flex; /* Use flexbox to create a row layout */
+  flex-wrap: wrap; /* Allow items to wrap onto multiple lines */
   justify-content: space-between;
 
 }
