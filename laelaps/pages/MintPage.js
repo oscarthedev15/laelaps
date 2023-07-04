@@ -168,7 +168,7 @@ export default function Utility() {
       <div className={styles.title}>Mint Your Master Key</div>
       <br /> */}
       <div className={styles.textMain}>
-        Master Key mint paused! Announcement coming soon....
+        Master Key has ended! Announcements coming soon....
       </div>
         <div className={styles.gifRow}>
           <div className={styles.gif}>
