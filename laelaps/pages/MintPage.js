@@ -82,47 +82,6 @@ export default function Utility() {
     }
   }
 
-  async function mintNFT(event) {
-    if (!isMismatched && userAddress) {
-      try {
-        setLoading(true);
-        // const provider = new ethers.providers.Web3Provider(window.ethereum);
-        // const gasPrice = await provider.getGasPrice();
-        // const signer = provider.getSigner();
-        // const contractInstance = new ethers.Contract(
-        //   contractAddress,
-        //   contractAbi,
-        //   signer
-        // );
-        //  const txn = await contractInstance.mintNFT(userAddress, {
-        //    value: ethers.utils.parseUnits(contractVals["Mint Cost"], "ether"),
-        //    gasPrice: gasPrice,
-        //  });
-
-        const recepit = await txn.wait();
-
-        console.log(recepit);
-        alert(
-          "Mint Successful! View your NFT on Opensea! Token address: ",
-          contractAddress
-        );
-        setLoading(false);
-      } catch (err) {
-        if (err.message.includes("insufficient funds for transfer")) {
-          alert("Insufficient user funds for transaction!");
-        } else {
-          alert("Error in Mint", err);
-          console.log(err);
-        }
-        setLoading(false);
-      }
-    } else if (!isMismatched && userAddress) {
-      alert("Switch to correct network!");
-    } else if (!isMismatched && !userAddress) {
-      alert("Please connect wallet in order to mint");
-    }
-  }
-
   return (
     <div className={styles.square}>
       <ConnectWallet />
@@ -174,7 +133,7 @@ export default function Utility() {
       <div className={styles.title}>Mint Your Master Key</div>
       <br />
       <div className={styles.textMain}>
-        Enjoy unparreleld access to the best trading bot around. Laelaps never
+        Enjoy unparalleled access to the best trading bot around. Laelaps never
         fails.
       </div>
     </div>
