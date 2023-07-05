@@ -44,6 +44,23 @@ const noBot = {
 
 export async function validateAccount(address, bot, chatId) {
   const balances = await getBalances(address);
+
+  if ((await Chat.findByChatId(chatId)).length > 0) {
+    await activeBot.telegram.sendMessage(
+      chatId,
+      `This chat has already been validated. Use command /hunt to get started.`
+    );
+    return;
+  }
+
+    if ((await Chat.findByAddress(address)).length > 0) {
+      await activeBot.telegram.sendMessage(
+        chatId,
+        `This Wallet has already been activated. Try another one.`
+      );
+      return;
+    }
+
   if (bot && chatId) {
     let activeBot = noBot[bot];
     if (balances.laelaps < 5000000 && balances.masterKey < 1) {
