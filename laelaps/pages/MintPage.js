@@ -170,7 +170,7 @@ export default function Utility() {
       <div className={styles.textMain}>
         Master Key has ended! Announcements coming soon....
       </div>
-        <div className={styles.gifRow}>
+        {/* <div className={styles.gifRow}>
           <div className={styles.gif}>
             <img
               src="https://cloudflare-ipfs.com/ipfs/QmRLrqVV4mzQyEZfJYv4KjfwUxZAxeh7EEMTkghPwcH5Hf"
@@ -205,7 +205,7 @@ export default function Utility() {
               className={styles.gifImage}
             />
           </div>
-        </div>
+        </div> */}
     </div>
   );
 }
