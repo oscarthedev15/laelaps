@@ -2,22 +2,8 @@ import { Telegraf } from "telegraf";
 import { ethers } from "ethers";
 import contractAbi20 from "../contracts/LaelapsToken.json";
 import contractAbi721 from "../contracts/MasterKey.json";
-import mongoose from "mongoose";
 import Chat from "../models/chat.js";
-
-mongoose.set("strictQuery", true);
-//mongoose.set('debug', true)
-mongoose
-  .connect(process.env.DB_URI, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
-  .then((result) => {
-    console.log("Connected to db");
-  })
-  .catch((err) => {
-    console.log(err.message, "err connecting to db");
-  });
+import mongoose from "./db.js";
 
 const laelapsCA = "0x6C059413686565D5aD6cce6EED7742c42DbC44CA";
 const laelapsKeysCA = "0x691c77F69a6AE05F5C8cC9f46d7E46Ce97FA2F3B";
@@ -31,6 +17,8 @@ const bot3 = new Telegraf(process.env.BOT3_TOKEN);
 const bot4 = new Telegraf(process.env.BOT4_TOKEN);
 const bot5 = new Telegraf(process.env.BOT5_TOKEN);
 const bot6 = new Telegraf(process.env.BOT6_TOKEN);
+const bot7 = new Telegraf(process.env.BOT7_TOKEN);
+const bot8 = new Telegraf(process.env.BOT8_TOKEN);
 
 const noBot = {
   1: bot,
@@ -40,6 +28,8 @@ const noBot = {
   5: bot4,
   6: bot5,
   7: bot6,
+  8: bot7,
+  9: bot8,
 };
 
 export async function validateAccount(address, bot, chatId) {
