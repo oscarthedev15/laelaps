@@ -11,7 +11,11 @@ const Navigation = () => {
 
   return (
     <div className={styles.container}>
-      <a href="#" className={styles.button} onClick={(e) => handleLinkClick(e, "/")}>
+      <a
+        href="#"
+        className={styles.button}
+        onClick={(e) => handleLinkClick(e, "/")}
+      >
         Home
       </a>
       <a
@@ -29,7 +33,11 @@ const Navigation = () => {
       >
         Chart
       </a>
-      <a href="https://t.me/LaelapsPortal" className={styles.button} target="_blank">
+      <a
+        href="https://t.me/LaelapsPortal"
+        className={styles.button}
+        target="_blank"
+      >
         Telegram
       </a>
       <a
@@ -45,6 +53,13 @@ const Navigation = () => {
         target="_blank"
       >
         Medium
+      </a>
+      <a
+        href="https://opensea.io/0xADC50022351F4AD58A2A4775Da4eDFD8ff58dEf3/created"
+        className={styles.button}
+        target="_blank"
+      >
+        Opensea
       </a>
     </div>
   );
