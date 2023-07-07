@@ -111,7 +111,7 @@ export async function getBalances(address) {
       contractAbi721A,
       provider
     );
-    const masterKeyBalancev2 = await masterKeyContract.balanceOf(address);
+    const masterKeyBalancev2 = await masterKeyContractv2.balanceOf(address);
     balances["masterKey"] += masterKeyBalancev2.toNumber();
 
   return balances;
