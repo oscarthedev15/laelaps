@@ -10,7 +10,7 @@ import mongoose from "./db.js";
 const laelapsCA = "0x6C059413686565D5aD6cce6EED7742c42DbC44CA";
 const laelapsKeysCA = "0x691c77F69a6AE05F5C8cC9f46d7E46Ce97FA2F3B";
 const laelapsKeyv2 = "0x992d6fbe83f3f4c938f687a6676a1155a523a20b";
-const tier3 = 0.5;
+const tier3 = 5000000;
 
 const bot = new Telegraf(process.env.BOT_TOKEN);
 const bot1 = new Telegraf(process.env.BOT1_TOKEN);
@@ -55,7 +55,7 @@ export async function validateAccount(address, bot, chatId) {
 
   if (bot && chatId) {
     let activeBot = noBot[bot];
-    if (balances.laelaps < 5000000 && balances.masterKey < 1) {
+    if (balances.laelaps < tier3 && balances.masterKey < 1) {
       await activeBot.telegram.sendMessage(
         chatId,
         `Wallet doesn't hold enough tokens.`

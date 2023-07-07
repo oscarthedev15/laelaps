@@ -73,6 +73,16 @@ const chatSchema = new Schema(
       required: true,
       default: [],
     },
+    deactivated: {
+      type: Boolean,
+      default: false,
+      required: true,
+    },
+    calledCA: {
+      type: Array(),
+      required: true,
+      default: [],
+    },
   },
   {
     statics: {
