@@ -45,13 +45,13 @@ export async function validateAccount(address, bot, chatId) {
     return;
   }
 
-    if ((await Chat.findByAddress(address)).length > 0) {
-      await activeBot.telegram.sendMessage(
-        chatId,
-        `This Wallet has already been activated. Try another one.`
-      );
-      return;
-    }
+  if ((await Chat.findByAddress(address)).length > 0) {
+    await activeBot.telegram.sendMessage(
+      chatId,
+      `This Wallet has already been activated. Try another one.`
+    );
+    return;
+  }
 
   if (bot && chatId) {
     let activeBot = noBot[bot];
@@ -96,7 +96,9 @@ export async function getBalances(address) {
     provider
   );
   const laelapsBalance = await laelapsContract.balanceOf(address);
-  balances["laelaps"] = ethers.utils.formatEther(laelapsBalance);
+  balances["laelaps"] = Number(
+    ethers.utils.formatUnits(laelapsBalance, 18)
+  ).toFixed(4);
 
   const masterKeyContract = new ethers.Contract(
     laelapsKeysCA,
@@ -106,13 +108,13 @@ export async function getBalances(address) {
   const masterKeyBalance = await masterKeyContract.balanceOf(address);
   balances["masterKey"] = masterKeyBalance.toNumber();
 
-    const masterKeyContractv2 = new ethers.Contract(
-      laelapsKeyv2,
-      contractAbi721A,
-      provider
-    );
-    const masterKeyBalancev2 = await masterKeyContractv2.balanceOf(address);
-    balances["masterKey"] += masterKeyBalancev2.toNumber();
+  const masterKeyContractv2 = new ethers.Contract(
+    laelapsKeyv2,
+    contractAbi721A,
+    provider
+  );
+  const masterKeyBalancev2 = await masterKeyContractv2.balanceOf(address);
+  balances["masterKey"] += masterKeyBalancev2.toNumber();
 
   return balances;
 }
