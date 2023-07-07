@@ -95,11 +95,13 @@
 
 
 .valuesContainer {
-    white-space: nowrap;
+  white-space: nowrap;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
 }
 
 .box {
-  display: inline-block;
   width: auto;
   height: auto;
   background-color: #e0e0e0;
@@ -107,7 +109,8 @@
   color: black;
   font-family: "title";
   padding: 8px;
-
+  margin-right: 8px;
+  margin-bottom: 8px;
 }
 
 
