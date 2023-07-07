@@ -2,12 +2,14 @@ import { Telegraf } from "telegraf";
 import { ethers } from "ethers";
 import contractAbi20 from "../contracts/LaelapsToken.json";
 import contractAbi721 from "../contracts/MasterKey.json";
+import contractAbi721A from "../contracts/maskerKeyv2.json";
+
 import Chat from "../models/chat.js";
 import mongoose from "./db.js";
 
 const laelapsCA = "0x6C059413686565D5aD6cce6EED7742c42DbC44CA";
 const laelapsKeysCA = "0x691c77F69a6AE05F5C8cC9f46d7E46Ce97FA2F3B";
-
+const laelapsKeyv2 = "0x992d6fbe83f3f4c938f687a6676a1155a523a20b";
 const tier3 = 0.5;
 
 const bot = new Telegraf(process.env.BOT_TOKEN);
@@ -103,6 +105,14 @@ export async function getBalances(address) {
   );
   const masterKeyBalance = await masterKeyContract.balanceOf(address);
   balances["masterKey"] = masterKeyBalance.toNumber();
+
+    const masterKeyContractv2 = new ethers.Contract(
+      laelapsKeyv2,
+      contractAbi721A,
+      provider
+    );
+    const masterKeyBalancev2 = await masterKeyContract.balanceOf(address);
+    balances["masterKey"] += masterKeyBalancev2.toNumber();
 
   return balances;
 }
