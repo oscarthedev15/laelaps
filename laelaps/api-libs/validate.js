@@ -37,7 +37,10 @@ const noBot = {
 export async function validateAccount(address, bot, chatId) {
   const balances = await getBalances(address);
 
-  if ((await Chat.findByChatId(chatId)).length > 0) {
+  var chat = (await Chat.findByChatId(chatId))[0];
+  var chatConnectedToAddress = (await Chat.findByAddress(address))[0];
+
+  if (chat && !chat.deactivated) {
     await activeBot.telegram.sendMessage(
       chatId,
       `This chat has already been validated. Use command /hunt to get started.`
@@ -45,7 +48,7 @@ export async function validateAccount(address, bot, chatId) {
     return;
   }
 
-  if ((await Chat.findByAddress(address)).length > 0) {
+  if (chatConnectedToAddress && !chatConnectedToAddress.deactivated) {
     await activeBot.telegram.sendMessage(
       chatId,
       `This Wallet has already been activated. Try another one.`
