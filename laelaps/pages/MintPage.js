@@ -103,7 +103,7 @@ export default function Utility() {
 
   return (
     <div className={styles.square}>
-      <ConnectWallet />
+      {/* <ConnectWallet />
       <br />
       {contractVals && (
         <Web3Button
@@ -142,21 +142,21 @@ export default function Utility() {
       <div className={styles.valuesContainer}>
         <div className={styles.box}>
           Mint Cost: {contractVals["Mint Cost"]} Eth
-        </div>
+        </div> */}
         {/* <div className={styles.box}>Total Minted: {total}</div> */}
         {/* <div className={styles.box}>Total Eth Bought Back: {total * .125 }</div> */}
         {/* <div className={styles.box}>
           Percent Laelaps Buy: {contractVals["Percentage"]}
         </div> */}
-      </div>
+      {/* </div>
       <br />
 
       <br />
       <div className={styles.title}>Mint Your Master Key</div>
-      <br />
-      {/* <div className={styles.textMain}>
+      <br /> */}
+      <div className={styles.textMain}>
         Master Key has ended! Announcements coming soon....
-      </div> */}
+      </div>
     </div>
   );
 }
