@@ -9,12 +9,26 @@ import {
   useContract,
   Web3Button,
 } from "@thirdweb-dev/react";
-import contractAbi from "../contracts/MasterKey.json";
+// import contractAbi from "../contracts/MasterKey.json";
+import contractAbi from "../contracts/masterKeyv3.json";
 import { ethers, toNumber } from "ethers";
 import { useState, useEffect } from "react";
 import { ThirdwebSDK } from "@thirdweb-dev/sdk";
 
-const contractAddress = "0x691c77F69a6AE05F5C8cC9f46d7E46Ce97FA2F3B";
+//ALCHEMY 
+import { Network, Alchemy } from "alchemy-sdk";
+
+// Optional Config object, but defaults to demo api-key and eth-mainnet.
+const settings = {
+  apiKey: "cLNpaQIaPfYBGmreAuiWQW2FNGfOEX4x", // Replace with your Alchemy API Key.
+  network: Network.ETH_MAINNET, // Replace with your network.
+};
+
+const alchemy = new Alchemy(settings);
+
+
+// const contractAddress = "0x691c77F69a6AE05F5C8cC9f46d7E46Ce97FA2F3B";
+const contractAddress = "0xd23C9Fd8238082D901385F8F525CEE14a53c5a6c";
 
 export default function Utility() {
   const isMismatched = useNetworkMismatch();
@@ -27,8 +41,15 @@ export default function Utility() {
     contract,
     "mintNFT"
   );
+  const [total, setTotal] = useState(0)
 
   useEffect(() => {
+
+    alchemy.nft
+      .getNftsForContract("0xd23C9Fd8238082D901385F8F525CEE14a53c5a6c")
+      .then((e) => setTotal(e.nfts.length));
+
+
     async function fetchData() {
       try {
         if (isMismatched && userAddress) {
@@ -68,9 +89,9 @@ export default function Utility() {
       const mintCost = await contractInstance.call("mintCost");
       const mintCostEth = ethers.utils.formatEther(mintCost);
       values["Mint Cost"] = mintCostEth;
-      const percentageBig = await contractInstance.call("percentage");
-      const percentage = percentageBig.toNumber();
-      values["Percentage"] = percentage + "%";
+      // const percentageBig = await contractInstance.call("percentage");
+      // const percentage = percentageBig.toNumber();
+      // values["Percentage"] = percentage + "%";
       console.log(values["Mint Cost"]);
       return values;
     } catch (err) {
@@ -79,59 +100,23 @@ export default function Utility() {
     }
   }
 
-  async function mintNFT(event) {
-    if (!isMismatched && userAddress) {
-      try {
-        setLoading(true);
-        // const provider = new ethers.providers.Web3Provider(window.ethereum);
-        // const gasPrice = await provider.getGasPrice();
-        // const signer = provider.getSigner();
-        // const contractInstance = new ethers.Contract(
-        //   contractAddress,
-        //   contractAbi,
-        //   signer
-        // );
-        //  const txn = await contractInstance.mintNFT(userAddress, {
-        //    value: ethers.utils.parseUnits(contractVals["Mint Cost"], "ether"),
-        //    gasPrice: gasPrice,
-        //  });
-
-        const recepit = await txn.wait();
-
-        console.log(recepit);
-        alert(
-          "Mint Successful! View your NFT on Opensea! Token address: ",
-          contractAddress
-        );
-        setLoading(false);
-      } catch (err) {
-        if (err.message.includes("insufficient funds for transfer")) {
-          alert("Insufficient user funds for transaction!");
-        } else {
-          alert("Error in Mint", err);
-          console.log(err);
-        }
-        setLoading(false);
-      }
-    } else if (!isMismatched && userAddress) {
-      alert("Switch to correct network!");
-    } else if (!isMismatched && !userAddress) {
-      alert("Please connect wallet in order to mint");
-    }
-  }
 
   return (
     <div className={styles.square}>
-      {/* <ConnectWallet />
+      <ConnectWallet />
       <br />
       {contractVals && (
         <Web3Button
           contractAddress={contractAddress}
           contractAbi={contractAbi}
           action={(contract) =>
-            contract.call("mintNFT", [userAddress], {value : ethers.utils.parseUnits(contractVals["Mint Cost"],
-                  "ether")})
-          } 
+            contract.call("mintNFT", [userAddress], {
+              value: ethers.utils.parseUnits(
+                contractVals["Mint Cost"],
+                "ether"
+              ),
+            })
+          }
           onError={(error) => {
             if (error.message.includes("Insufficient funds")) {
               alert("Insufficient user funds");
@@ -158,54 +143,20 @@ export default function Utility() {
         <div className={styles.box}>
           Mint Cost: {contractVals["Mint Cost"]} Eth
         </div>
-        <div className={styles.box}>
+        <div className={styles.box}>Total Minted: {total}</div>
+        <div className={styles.box}>Total Eth Bought Back: {total * .125 }</div>
+        {/* <div className={styles.box}>
           Percent Laelaps Buy: {contractVals["Percentage"]}
-        </div>
+        </div> */}
       </div>
       <br />
-      
+
       <br />
       <div className={styles.title}>Mint Your Master Key</div>
-      <br /> */}
-      <div className={styles.textMain}>
+      <br />
+      {/* <div className={styles.textMain}>
         Master Key has ended! Announcements coming soon....
-      </div>
-        {/* <div className={styles.gifRow}>
-          <div className={styles.gif}>
-            <img
-              src="https://cloudflare-ipfs.com/ipfs/QmRLrqVV4mzQyEZfJYv4KjfwUxZAxeh7EEMTkghPwcH5Hf"
-              className={styles.gifImage}
-            />
-          </div>
-
-          <div className={styles.gif}>
-            <img
-              src="https://cloudflare-ipfs.com/ipfs/QmW8Tow79oWqyGBYTe6HUmT8zLqb39oVqRFqBRL2imS28z"
-              className={styles.gifImage}
-            />
-          </div>
-
-          <div className={styles.gif}>
-            <img
-              src="https://cloudflare-ipfs.com/ipfs/QmWdjfJb4z3m9YkEvvRb3DY85KCkFhSEGF6YHVWB9qZe8B"
-              className={styles.gifImage}
-            />
-          </div>
-
-          <div className={styles.gif}>
-            <img
-              src="https://cloudflare-ipfs.com/ipfs/QmaVmzp7Ln8YQbZwu5ahqfWdjdcn9KEdDBctmMMAng2RfJ"
-              className={styles.gifImage}
-            />
-          </div>
-
-          <div className={styles.gif}>
-            <img
-              src="https://cloudflare-ipfs.com/ipfs/QmZ4reQiStQACTLYncxo7nsBHrB4hC1kzweu16b7SjeHWY"
-              className={styles.gifImage}
-            />
-          </div>
-        </div> */}
+      </div> */}
     </div>
   );
 }
