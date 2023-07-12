@@ -10,25 +10,29 @@ import {
   Web3Button,
 } from "@thirdweb-dev/react";
 import contractAbi from "../contracts/MasterKey.json";
-// import contractAbi from "../contracts/masterKeyv3.json";
+// import contractAbiv2 from "../contracts/masterKeyv2.json";
+
+// import contractAbiv3 from "../contracts/masterKeyv3.json";
 import { ethers, toNumber } from "ethers";
 import { useState, useEffect } from "react";
 import { ThirdwebSDK } from "@thirdweb-dev/sdk";
 
 //ALCHEMY 
-// import { Network, Alchemy } from "alchemy-sdk";
+import { Network, Alchemy } from "alchemy-sdk";
 
-// // Optional Config object, but defaults to demo api-key and eth-mainnet.
-// const settings = {
-//   apiKey: "cLNpaQIaPfYBGmreAuiWQW2FNGfOEX4x", // Replace with your Alchemy API Key.
-//   network: Network.ETH_MAINNET, // Replace with your network.
-// };
+// Optional Config object, but defaults to demo api-key and eth-mainnet.
+const settings = {
+  apiKey: "cLNpaQIaPfYBGmreAuiWQW2FNGfOEX4x", // Replace with your Alchemy API Key.
+  network: Network.ETH_MAINNET, // Replace with your network.
+};
 
-// const alchemy = new Alchemy(settings);
+const alchemy = new Alchemy(settings);
 
 ;
 const contractAddress = "0x691c77F69a6AE05F5C8cC9f46d7E46Ce97FA2F3B";
-// const contractAddress = "0xd23C9Fd8238082D901385F8F525CEE14a53c5a6c";
+// const contractAddressv2 = "0x992d6fbe83f3f4c938f687a6676a1155a523a20b";
+// const contractAddressv3 = "0xd23C9Fd8238082D901385F8F525CEE14a53c5a6c";
+
 
 export default function Utility() {
   const isMismatched = useNetworkMismatch();
@@ -41,13 +45,15 @@ export default function Utility() {
     contract,
     "mintNFT"
   );
-  // const [total, setTotal] = useState(0)
+  const [total, setTotal] = useState(0)
 
   useEffect(() => {
 
-    // alchemy.nft
-    //   .getNftsForContract("0xd23C9Fd8238082D901385F8F525CEE14a53c5a6c")
-    //   .then((e) => setTotal(e.nfts.length));
+    alchemy.nft
+      .getNftsForContract(contractAddress, {limit: 500})
+      .then((e) => {
+        console.log(e.nfts.length)
+        setTotal(e.nfts.length)});
 
 
     async function fetchData() {
@@ -144,7 +150,7 @@ export default function Utility() {
           Mint Cost: {contractVals["Mint Cost"]} Eth
         </div>
         {/* <div className={styles.box}>Total Minted: {total}</div> */}
-        {/* <div className={styles.box}>Total Eth Bought Back: {total * .125 }</div> */}
+        <div className={styles.box}>Total Eth Bought Back: {(263 - 253) * .5 }</div>
         {/* <div className={styles.box}>
           Percent Laelaps Buy: {contractVals["Percentage"]}
         </div> */}
