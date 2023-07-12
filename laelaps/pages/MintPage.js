@@ -34,6 +34,8 @@ const contractAddress = "0x691c77F69a6AE05F5C8cC9f46d7E46Ce97FA2F3B";
 // const contractAddressv3 = "0xd23C9Fd8238082D901385F8F525CEE14a53c5a6c";
 
 
+const TOTAL = 263
+
 export default function Utility() {
   const isMismatched = useNetworkMismatch();
   const userAddress = useAddress();
@@ -150,10 +152,10 @@ export default function Utility() {
           Mint Cost: {contractVals["Mint Cost"]} Eth
         </div>
         {/* <div className={styles.box}>Total Minted: {total}</div> */}
-        <div className={styles.box}>Total Eth Bought Back: {(263 - 253) * .5 }</div>
-        {/* <div className={styles.box}>
-          Percent Laelaps Buy: {contractVals["Percentage"]}
-        </div> */}
+        <div className={styles.box}>Total Eth Bought Back: {(TOTAL - 253) * .5 }</div>
+        <div className={styles.box}>
+          NFTs Remaining: {100 - (TOTAL - 253)}
+        </div>
         {/* </div>
       <br />
 
