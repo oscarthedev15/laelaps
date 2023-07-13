@@ -9,8 +9,8 @@ import {
   useContract,
   Web3Button,
 } from "@thirdweb-dev/react";
-import contractAbi from "../contracts/MasterKey.json";
-// import contractAbiv2 from "../contracts/masterKeyv2.json";
+// import contractAbiv1 from "../contracts/MasterKey.json";
+import contractAbi from "../contracts/masterKeyv2.json";
 
 // import contractAbiv3 from "../contracts/masterKeyv3.json";
 import { ethers, toNumber } from "ethers";
@@ -29,8 +29,8 @@ const settings = {
 const alchemy = new Alchemy(settings);
 
 ;
-const contractAddress = "0x691c77F69a6AE05F5C8cC9f46d7E46Ce97FA2F3B";
-// const contractAddressv2 = "0x992d6fbe83f3f4c938f687a6676a1155a523a20b";
+// const contractAddressv1 = "0x691c77F69a6AE05F5C8cC9f46d7E46Ce97FA2F3B";
+const contractAddress = "0x992d6fbe83f3f4c938f687a6676a1155a523a20b";
 // const contractAddressv3 = "0xd23C9Fd8238082D901385F8F525CEE14a53c5a6c";
 
 
@@ -94,13 +94,15 @@ export default function Utility() {
         contractAbi
       );
 
-      const mintCost = await contractInstance.call("mintCost");
+      const mintCost = await contractInstance.call("PRICE_PER_TOKEN");
       const mintCostEth = ethers.utils.formatEther(mintCost);
       values["Mint Cost"] = mintCostEth;
       // const percentageBig = await contractInstance.call("percentage");
       // const percentage = percentageBig.toNumber();
       // values["Percentage"] = percentage + "%";
-      console.log(values["Mint Cost"]);
+      const remaining = await contractInstance.call("totalSupply");
+      values["remaining"] = 225 - remaining.toNumber();
+      console.log(values["remaining"]);
       return values;
     } catch (err) {
       console.log(err);
@@ -118,7 +120,7 @@ export default function Utility() {
           contractAddress={contractAddress}
           contractAbi={contractAbi}
           action={(contract) =>
-            contract.call("mintNFT", [userAddress], {
+            contract.call("mintSingle", [userAddress], {
               value: ethers.utils.parseUnits(
                 contractVals["Mint Cost"],
                 "ether"
@@ -152,9 +154,9 @@ export default function Utility() {
           Mint Cost: {contractVals["Mint Cost"]} Eth
         </div>
         {/* <div className={styles.box}>Total Minted: {total}</div> */}
-        <div className={styles.box}>Total Eth Bought Back: {(TOTAL - 253) * .5 }</div>
+        {/* <div className={styles.box}>Total Eth Bought Back: {(TOTAL - 253) * .5 }</div> */}
         <div className={styles.box}>
-          NFTs Remaining: {100 - (TOTAL - 253)}
+          NFTs Remaining: {contractVals["remaining"]}
         </div>
         {/* </div>
       <br />
