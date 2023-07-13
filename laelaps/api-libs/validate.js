@@ -2,7 +2,7 @@ import { Telegraf } from "telegraf";
 import { ethers } from "ethers";
 import contractAbi20 from "../contracts/LaelapsToken.json";
 import contractAbi721 from "../contracts/MasterKey.json";
-import contractAbi721A from "../contracts/maskerKeyv2.json";
+import contractAbi721A from "../contracts/masterKeyv2.json";
 
 import Chat from "../models/chat.js";
 import mongoose from "./db.js";
