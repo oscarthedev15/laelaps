@@ -101,7 +101,7 @@ export default function Utility() {
       // const percentage = percentageBig.toNumber();
       // values["Percentage"] = percentage + "%";
       const remaining = await contractInstance.call("totalSupply");
-      values["remaining"] = 225 - remaining.toNumber();
+      values["remaining"] = 225 - remaining.toNumber() - 10; //HARD CODE TO START AT 65
       console.log(values["remaining"]);
       return values;
     } catch (err) {
