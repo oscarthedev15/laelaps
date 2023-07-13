@@ -34,7 +34,7 @@ const contractAddress = "0x691c77F69a6AE05F5C8cC9f46d7E46Ce97FA2F3B";
 // const contractAddressv3 = "0xd23C9Fd8238082D901385F8F525CEE14a53c5a6c";
 
 
-const TOTAL = 268;
+const TOTAL = 286;
 
 export default function Utility() {
   const isMismatched = useNetworkMismatch();
