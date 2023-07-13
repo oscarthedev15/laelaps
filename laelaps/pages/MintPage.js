@@ -100,8 +100,11 @@ export default function Utility() {
       // const percentageBig = await contractInstance.call("percentage");
       // const percentage = percentageBig.toNumber();
       // values["Percentage"] = percentage + "%";
+
+      //********************************************* */
       const remaining = await contractInstance.call("totalSupply");
       values["remaining"] = 225 - remaining.toNumber() - 10; //HARD CODE TO START AT 65
+      //****************************** */
       console.log(values["remaining"]);
       return values;
     } catch (err) {
@@ -154,7 +157,7 @@ export default function Utility() {
           Mint Cost: {contractVals["Mint Cost"]} Eth
         </div>
         {/* <div className={styles.box}>Total Minted: {total}</div> */}
-        {/* <div className={styles.box}>Total Eth Bought Back: {(TOTAL - 253) * .5 }</div> */}
+        <div className={styles.box}>Total Eth Bought Back: {(TOTAL - 253) * .5 }</div>
         <div className={styles.box}>
           NFTs Remaining: {contractVals["remaining"]}
         </div>
