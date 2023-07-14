@@ -90,7 +90,7 @@ export async function validateAccount(address, bot, chatId) {
   } else {
     return balances;
   }
-}
+} 
 
 export async function getBalances(address) {
   const balances = {};
