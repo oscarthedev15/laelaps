@@ -103,7 +103,7 @@ export default function Utility() {
 
       //********************************************* */
       const remaining = await contractInstance.call("totalSupply");
-      values["remaining"] = 225 - remaining.toNumber(); 
+      values["remaining"] = 215 - remaining.toNumber(); 
       //****************************** */
       console.log(values["remaining"]);
       return values;
