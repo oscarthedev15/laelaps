@@ -17,7 +17,7 @@ import { ethers, toNumber } from "ethers";
 import { useState, useEffect } from "react";
 import { ThirdwebSDK } from "@thirdweb-dev/sdk";
 
-//ALCHEMY 
+//ALCHEMY
 import { Network, Alchemy } from "alchemy-sdk";
 
 // Optional Config object, but defaults to demo api-key and eth-mainnet.
@@ -28,11 +28,9 @@ const settings = {
 
 const alchemy = new Alchemy(settings);
 
-;
 // const contractAddressv1 = "0x691c77F69a6AE05F5C8cC9f46d7E46Ce97FA2F3B";
 const contractAddress = "0x992d6fbe83f3f4c938f687a6676a1155a523a20b";
 // const contractAddressv3 = "0xd23C9Fd8238082D901385F8F525CEE14a53c5a6c";
-
 
 const TOTAL = 288;
 
@@ -47,16 +45,15 @@ export default function Utility() {
     contract,
     "mintNFT"
   );
-  const [total, setTotal] = useState(0)
+  const [total, setTotal] = useState(0);
 
   useEffect(() => {
-
     alchemy.nft
-      .getNftsForContract(contractAddress, {limit: 500})
+      .getNftsForContract(contractAddress, { limit: 500 })
       .then((e) => {
-        console.log(e.nfts.length)
-        setTotal(e.nfts.length)});
-
+        console.log(e.nfts.length);
+        setTotal(e.nfts.length);
+      });
 
     async function fetchData() {
       try {
@@ -103,7 +100,7 @@ export default function Utility() {
 
       //********************************************* */
       const remaining = await contractInstance.call("totalSupply");
-      values["remaining"] = 215 - remaining.toNumber(); 
+      values["remaining"] = 215 - remaining.toNumber();
       //****************************** */
       console.log(values["remaining"]);
       return values;
@@ -113,10 +110,9 @@ export default function Utility() {
     }
   }
 
-
   return (
     <div className={styles.square}>
-      <ConnectWallet />
+      {/* <ConnectWallet />
       <br />
       {contractVals && (
         <Web3Button
@@ -149,27 +145,28 @@ export default function Utility() {
         >
           MINT MASTER KEY
         </Web3Button>
-      )}
+      )} */}
 
       <br />
-      <div className={styles.valuesContainer}>
-        <div className={styles.box}>
+      {/* <div className={styles.valuesContainer}> */}
+        {/* <div className={styles.box}>
           Mint Cost: {contractVals["Mint Cost"]} Eth
-        </div>
-        {/* <div className={styles.box}>Total Minted: {total}</div> */}
-        <div className={styles.box}>Total Eth Bought Back: {(TOTAL - 253) * .5 }</div>
-        <div className={styles.box}>
+        </div> */}
+        {/* <div className={styles.box}>Total Minted: {total}</div> */} 
+        {/* <div className={styles.box}>
+          Total Eth Bought Back: {(TOTAL - 253) * 0.5}
+        </div> */}
+        {/* <div className={styles.box}>
           NFTs Remaining: {contractVals["remaining"]}
-        </div>
-        {/* </div>
-      <br />
+        </div> */}
+      {/* </div> */}
 
-      <br />
+      {/* <br />
       <div className={styles.title}>Mint Your Master Key</div>
+      <br /> */}
       <br />
-      {/* <div className={styles.textMain}>
+      <div className={styles.textMain}>
         Master Key has ended! Announcements coming soon....
-        */}
       </div>
     </div>
   );
