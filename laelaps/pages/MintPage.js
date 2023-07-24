@@ -9,8 +9,8 @@ import {
   useContract,
   Web3Button,
 } from "@thirdweb-dev/react";
-// import contractAbiv1 from "../contracts/MasterKey.json";
-import contractAbi from "../contracts/masterKeyv2.json";
+import contractAbi from "../contracts/MasterKey.json";
+// import contractAbiv2 from "../contracts/masterKeyv2.json";
 
 // import contractAbiv3 from "../contracts/masterKeyv3.json";
 import { ethers, toNumber } from "ethers";
@@ -20,6 +20,7 @@ import { ThirdwebSDK } from "@thirdweb-dev/sdk";
 //ALCHEMY
 import { Network, Alchemy } from "alchemy-sdk";
 
+
 // Optional Config object, but defaults to demo api-key and eth-mainnet.
 const settings = {
   apiKey: "cLNpaQIaPfYBGmreAuiWQW2FNGfOEX4x", // Replace with your Alchemy API Key.
@@ -28,8 +29,8 @@ const settings = {
 
 const alchemy = new Alchemy(settings);
 
-// const contractAddressv1 = "0x691c77F69a6AE05F5C8cC9f46d7E46Ce97FA2F3B";
-const contractAddress = "0x992d6fbe83f3f4c938f687a6676a1155a523a20b";
+const contractAddress = "0x691c77F69a6AE05F5C8cC9f46d7E46Ce97FA2F3B";
+// const contractAddressv2 = "0x992d6fbe83f3f4c938f687a6676a1155a523a20b";
 // const contractAddressv3 = "0xd23C9Fd8238082D901385F8F525CEE14a53c5a6c";
 
 const TOTAL = 288;
@@ -48,12 +49,12 @@ export default function Utility() {
   const [total, setTotal] = useState(0);
 
   useEffect(() => {
-    alchemy.nft
-      .getNftsForContract(contractAddress, { limit: 500 })
-      .then((e) => {
-        console.log(e.nfts.length);
-        setTotal(e.nfts.length);
-      });
+    // alchemy.nft
+    //   .getNftsForContract(contractAddress, { limit: 500 })
+    //   .then((e) => {
+    //     console.log(e.nfts.length);
+    //     setTotal(e.nfts.length);
+    //   });
 
     async function fetchData() {
       try {
@@ -91,18 +92,20 @@ export default function Utility() {
         contractAbi
       );
 
-      const mintCost = await contractInstance.call("PRICE_PER_TOKEN");
+      const mintCost = await contractInstance.call("mintCost");
       const mintCostEth = ethers.utils.formatEther(mintCost);
+            console.log(mintCostEth);
+
       values["Mint Cost"] = mintCostEth;
       // const percentageBig = await contractInstance.call("percentage");
       // const percentage = percentageBig.toNumber();
       // values["Percentage"] = percentage + "%";
 
       //********************************************* */
-      const remaining = await contractInstance.call("totalSupply");
-      values["remaining"] = 215 - remaining.toNumber();
+      // const remaining = await contractInstance.call("totalSupply");
+      // values["remaining"] = 215 - remaining.toNumber();
       //****************************** */
-      console.log(values["remaining"]);
+      // console.log(values["remaining"]);
       return values;
     } catch (err) {
       console.log(err);
@@ -112,7 +115,7 @@ export default function Utility() {
 
   return (
     <div className={styles.square}>
-      {/* <ConnectWallet />
+      <ConnectWallet />
       <br />
       {contractVals && (
         <Web3Button
@@ -145,13 +148,13 @@ export default function Utility() {
         >
           MINT MASTER KEY
         </Web3Button>
-      )} */}
+      )}
 
       <br />
-      {/* <div className={styles.valuesContainer}> */}
-        {/* <div className={styles.box}>
+      <div className={styles.valuesContainer}>
+        <div className={styles.box}>
           Mint Cost: {contractVals["Mint Cost"]} Eth
-        </div> */}
+        </div>
         {/* <div className={styles.box}>Total Minted: {total}</div> */} 
         {/* <div className={styles.box}>
           Total Eth Bought Back: {(TOTAL - 253) * 0.5}
@@ -159,15 +162,15 @@ export default function Utility() {
         {/* <div className={styles.box}>
           NFTs Remaining: {contractVals["remaining"]}
         </div> */}
-      {/* </div> */}
+      </div>
 
       {/* <br />
       <div className={styles.title}>Mint Your Master Key</div>
-      <br /> */}
       <br />
+      {/* <br />
       <div className={styles.textMain}>
         Master Key has ended! Announcements coming soon....
-      </div>
+      </div> */}
     </div>
   );
 }
