@@ -122,7 +122,7 @@ export default function Utility() {
           contractAddress={contractAddress}
           contractAbi={contractAbi}
           action={(contract) =>
-            contract.call("mintSingle", [userAddress], {
+            contract.call("mintNFT", [userAddress], {
               value: ethers.utils.parseUnits(
                 contractVals["Mint Cost"],
                 "ether"
