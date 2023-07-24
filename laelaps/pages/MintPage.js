@@ -115,7 +115,7 @@ export default function Utility() {
 
   return (
     <div className={styles.square}>
-      <ConnectWallet />
+      {/* <ConnectWallet />
       <br />
       {contractVals && (
         <Web3Button
@@ -162,15 +162,15 @@ export default function Utility() {
         {/* <div className={styles.box}>
           NFTs Remaining: {contractVals["remaining"]}
         </div> */}
-      </div>
+      {/* </div>  */}
 
-      {/* <br />
+       <br />
       <div className={styles.title}>Mint Your Master Key</div>
       <br />
-      {/* <br />
+       <br />
       <div className={styles.textMain}>
         Master Key has ended! Announcements coming soon....
-      </div> */}
+      </div> 
     </div>
   );
 }
