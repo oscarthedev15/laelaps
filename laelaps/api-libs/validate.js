@@ -43,7 +43,7 @@ export async function validateAccount(address, bot, chatId) {
 
   var chat = (await Chat.findByChatId(chatId))[0];
   var chatConnectedToAddress = (await Chat.findByAddress(address))[0];
-
+  let activeBot = noBot[bot];
   if (chat && !chat.deactivated) {
     await activeBot.telegram.sendMessage(
       chatId,
