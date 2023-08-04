@@ -124,4 +124,4 @@ export async function getBalances(address) {
   balances["masterKey"] += masterKeyBalancev2.toNumber();
 
   return balances;
-}
+} 
