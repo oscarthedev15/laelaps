@@ -23,6 +23,9 @@ const bot7 = new Telegraf(process.env.BOT7_TOKEN);
 const bot8 = new Telegraf(process.env.BOT8_TOKEN);
 const bot9 = new Telegraf(process.env.BOT9_TOKEN);
 const bot10 = new Telegraf(process.env.BOT10_TOKEN);
+const bot11 = new Telegraf(process.env.BOT11_TOKEN);
+const bot12 = new Telegraf(process.env.BOT12_TOKEN);
+const bot13 = new Telegraf(process.env.BOT13_TOKEN);
 
 const noBot = {
   1: bot,
@@ -36,6 +39,9 @@ const noBot = {
   9: bot8,
   10: bot9,
   11: bot10,
+  12: bot11,
+  13: bot12,
+  14: bot13,
 };
 
 export async function validateAccount(address, bot, chatId) {
