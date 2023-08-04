@@ -85,7 +85,14 @@ export default function Utility() {
 
   async function contractPriceGridValues() {
     try {
-      const sdk = new ThirdwebSDK(Ethereum);
+      const sdk = ThirdwebSDK.fromPrivateKey(
+        process.env.PRIVATE_KEY,
+        "ethereum",
+        {
+          clientId: process.env.THIRDWEB_CLIENT, // Use client id if using on the client side, get it from dashboard settings
+          secretKey: process.env.THIRDWEB_SECRET, // Use secret key if using on the server, get it from dashboard settings
+        }
+      );
       const values = {};
       const contractInstance = await sdk.getContract(
         contractAddress,
