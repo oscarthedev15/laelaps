@@ -14,7 +14,7 @@ function MyApp({ Component, pageProps }) {
   return (
     <ThirdwebProvider
       activeChain={activeChain}
-      clientId={process.env.THIRDWEB_CLIENT}
+      clientId={process.env.NEXT_PUBLIC_THIRDWEB_CLIENT}
     >
       <Head>
         <title>Laelaps</title>
