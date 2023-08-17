@@ -48,11 +48,11 @@ const noBot = {
 
 export async function validateAccount(address, bot, chatId) {
   const balances = await getBalances(address);
-  return balances
   var chat = (await Chat.findByChatId(chatId))[0];
   var chatConnectedToAddress = (await Chat.findByAddress(address))[0];
   let activeBot = noBot[bot];
   if (chat && !chat.deactivated) {
+    console.log("SENDING MSG")
     await activeBot.telegram.sendMessage(
       chatId,
       `This chat has already been validated. Use command /hunt to get started.`
@@ -71,12 +71,14 @@ export async function validateAccount(address, bot, chatId) {
   if (bot && chatId) {
     let activeBot = noBot[bot];
     if (balances.laelaps < tier3 && balances.masterKey < 1) {
+      console.log("SENDING MSG");
       await activeBot.telegram.sendMessage(
         chatId,
         `Wallet doesn't hold enough tokens.`
       );
       return balances;
     } else {
+      console.log("SENDING MSG");
       await activeBot.telegram.sendMessage(
         chatId,
         `Account has been activated. Use /hunt to get started`
