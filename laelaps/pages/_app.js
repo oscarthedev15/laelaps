@@ -12,7 +12,10 @@ const activeChain = "ethereum";
 
 function MyApp({ Component, pageProps }) {
   return (
-    <ThirdwebProvider activeChain={activeChain}>
+    <ThirdwebProvider
+      activeChain={activeChain}
+      clientId={process.env.THIRDWEB_CLIENT}
+    >
       <Head>
         <title>Laelaps</title>
         <link rel="icon" href="/images/image0.png" />
