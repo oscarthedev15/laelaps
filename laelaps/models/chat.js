@@ -1,5 +1,5 @@
-const mongoose = require("mongoose");
-const Schema = mongoose.Schema;
+import { Schema as _Schema, model } from "mongoose";
+const Schema = _Schema;
 
 const chatSchema = new Schema(
   {
@@ -40,7 +40,7 @@ const chatSchema = new Schema(
       required: true,
     },
     filters: {
-      type: Object(),
+      type: Object,
       required: true,
       default: {
         burn: false,
@@ -113,7 +113,7 @@ const chatSchema = new Schema(
   { timestamps: true }
 );
 
-const Chat = mongoose.model("Chat", chatSchema);
+const Chat = model("Chat", chatSchema);
 
-module.exports = Chat;
+export default Chat;
 

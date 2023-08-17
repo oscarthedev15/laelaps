@@ -6,7 +6,7 @@ import contractAbi721A from "../contracts/masterKeyv2.json";
 import contractAbi1155 from "../contracts/Skull.json";
 
 import Chat from "../models/chat.js";
-// import mongoose from "./db.js";
+import mongoose from "./db.js";
 
 const laelapsCA = "0x6C059413686565D5aD6cce6EED7742c42DbC44CA";
 const laelapsKeysCA = "0x691c77F69a6AE05F5C8cC9f46d7E46Ce97FA2F3B";
@@ -48,6 +48,7 @@ const noBot = {
 
 export async function validateAccount(address, bot, chatId) {
   const balances = await getBalances(address);
+  return balances
   var chat = (await Chat.findByChatId(chatId))[0];
   var chatConnectedToAddress = (await Chat.findByAddress(address))[0];
   let activeBot = noBot[bot];
