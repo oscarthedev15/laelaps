@@ -3,13 +3,15 @@ import { ethers } from "ethers";
 import contractAbi20 from "../contracts/LaelapsToken.json";
 import contractAbi721 from "../contracts/MasterKey.json";
 import contractAbi721A from "../contracts/masterKeyv2.json";
+import contractAbi1155 from "../contracts/Skull.json";
 
 import Chat from "../models/chat.js";
-import mongoose from "./db.js";
+// import mongoose from "./db.js";
 
 const laelapsCA = "0x6C059413686565D5aD6cce6EED7742c42DbC44CA";
 const laelapsKeysCA = "0x691c77F69a6AE05F5C8cC9f46d7E46Ce97FA2F3B";
 const laelapsKeyv2 = "0x992d6fbe83f3f4c938f687a6676a1155a523a20b";
+const skullCA = "0xd8abb74b79e534d903a821e59d1b06ca04c6af40";
 const tier3 = 5000000;
 
 const bot = new Telegraf(process.env.BOT_TOKEN);
@@ -46,7 +48,6 @@ const noBot = {
 
 export async function validateAccount(address, bot, chatId) {
   const balances = await getBalances(address);
-
   var chat = (await Chat.findByChatId(chatId))[0];
   var chatConnectedToAddress = (await Chat.findByAddress(address))[0];
   let activeBot = noBot[bot];
@@ -55,7 +56,7 @@ export async function validateAccount(address, bot, chatId) {
       chatId,
       `This chat has already been validated. Use command /hunt to get started.`
     );
-    return;
+    return balances;
   }
 
   if (chatConnectedToAddress && !chatConnectedToAddress.deactivated) {
@@ -63,7 +64,7 @@ export async function validateAccount(address, bot, chatId) {
       chatId,
       `This Wallet has already been activated. Try another one.`
     );
-    return;
+    return balances;
   }
 
   if (bot && chatId) {
@@ -103,6 +104,8 @@ export async function getBalances(address) {
   const provider = new ethers.providers.JsonRpcProvider(
     `https://mainnet.infura.io/v3/${process.env.INFURA}`
   );
+
+  //LAELAPS BALANCE
   const laelapsContract = new ethers.Contract(
     laelapsCA,
     contractAbi20,
@@ -113,6 +116,8 @@ export async function getBalances(address) {
     ethers.utils.formatUnits(laelapsBalance, 18)
   ).toFixed(4);
 
+  //MASTER KEY V1 BALANCE
+
   const masterKeyContract = new ethers.Contract(
     laelapsKeysCA,
     contractAbi721,
@@ -121,13 +126,27 @@ export async function getBalances(address) {
   const masterKeyBalance = await masterKeyContract.balanceOf(address);
   balances["masterKey"] = masterKeyBalance.toNumber();
 
+  //MASTER KEY V2 BALANCE
+
   const masterKeyContractv2 = new ethers.Contract(
     laelapsKeyv2,
     contractAbi721A,
     provider
   );
+
   const masterKeyBalancev2 = await masterKeyContractv2.balanceOf(address);
   balances["masterKey"] += masterKeyBalancev2.toNumber();
+
+  //SKULL KEY BALANCE
+
+  const skullContract = new ethers.Contract(
+    skullCA,
+    contractAbi1155,
+    provider
+  );
+
+  const skullBalance = await skullContract.balanceOf(address, 0);
+  balances["skull"] = skullBalance.toNumber();
 
   return balances;
 } 

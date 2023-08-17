@@ -40,7 +40,7 @@ const chatSchema = new Schema(
       required: true,
     },
     filters: {
-      type: Object,
+      type: Object(),
       required: true,
       default: {
         burn: false,
@@ -51,6 +51,11 @@ const chatSchema = new Schema(
         honeypot: false,
         sus: false,
         strict: false,
+        verified: false,
+        unique: false,
+        socials: false,
+        contract: false,
+        lp: false,
       },
     },
     blacklisted: {
@@ -83,6 +88,11 @@ const chatSchema = new Schema(
       required: true,
       default: [],
     },
+    skull: {
+      type: Object(),
+      required: true,
+      default: { isSkull: false, bot: "", preset: "", calledCA: [] },
+    },
   },
   {
     statics: {
@@ -107,23 +117,3 @@ const Chat = mongoose.model("Chat", chatSchema);
 
 module.exports = Chat;
 
-// {
-//     chatId: 5918569229,
-//     tier: 3,
-//     address: '0x7101064F2f57C79054ECA0034fC544E9e8DF7c5f',
-//     bot: '4',
-//     walletThreshold: 5000,
-//     mcapThreshold: 1000000,
-//     hunting: true,
-//     filters: {
-//       burn: false,
-//       locked: false,
-//       renounced: false,
-//       notax: false,
-//       new: false,
-//       honeypot: false,
-//       'min-wallet': 5000
-//     },
-//     blacklisted: { ca: [], wallet: [], keyword: [], deployer: [], c },
-//     favorites: {}
-//   }

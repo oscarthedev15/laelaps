@@ -1,4 +1,4 @@
-import { validateAccount } from "../../api-libs/validate";
+import { validateAccount, getBalances } from "../../api-libs/validate";
 
 export default async function handler(req, res) {
   if (req.method !== "POST") {
@@ -7,8 +7,11 @@ export default async function handler(req, res) {
   }
 
   const { userAddress, bot, chatId } = req.body;
-  
-  const balances = await validateAccount(userAddress, bot, chatId);
+  let balances;
+  if (bot && chatId)
+    balances = await validateAccount(userAddress, bot, chatId);
+  else
+    balances = await getBalances(userAddress)
   
   res.json(balances);
 

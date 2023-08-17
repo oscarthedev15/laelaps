@@ -52,6 +52,9 @@ export default function Utility() {
         <div className={styles.box}>
           Master Key Balance: {balances["masterKey"]}
         </div>
+        <div className={styles.box}>
+          Skull Key Balance: {balances["skull"]}
+        </div>
       </div>
       <div className={styles.textMain}>{message}</div>
     </div>
