@@ -1,42 +1,200 @@
 // Setup: npm install alchemy-sdk
 import { Alchemy, Network, fromHex } from "alchemy-sdk";
 const { ethers } = require("ethers");
+import Subscription from "../models/subscription.js";
+import mongoose from "./db.js";
 
-export async function getNFTinfo(userAddress, nftAddress) {
+const REWARD_ADDRESS = "0x48bffd60686b8259887862d0e73ac2087d446a5f";
+const SUBSCRIPTION_COST = 0.00000000000001;
+
+const NETWORK = Network.ETH_GOERLI;
+const DAYS_AGO = 0.01;
+
+const providerNetwork = "goerli";
+// const providerNetwork = "homestead"
+
+export async function getNFTinfo(userAddress, nftAddress, chatId, bot) {
   const config = {
     apiKey: process.env.ALCHEMY_TOKEN,
-    network: Network.ETH_MAINNET,
+    network: NETWORK,
   };
   const alchemy = new Alchemy(config);
 
-  // Address we want get NFT mints from
-  const toAddress = userAddress;
-
+  //_____________________________Code for NFT receiving: __________________________________
   const res = await alchemy.core.getAssetTransfers({
     fromBlock: "0x0",
-    toAddress: toAddress,
+    toAddress: userAddress,
     excludeZeroValue: true,
-    category: ["erc721", "erc1155"],
+    category: ["erc1155"],
   });
 
-  console.log(res);
-  let txns = res.transfers
-    .filter
-    // (txn) => txn.rawContract.address === nftAddress //WORKS FOR NFT 721
-
-    // (txn) => txn.asset === "LSK" // WORKS FOR NFT 1155 (no contract address for 1155 return call)
-    ();
-  const blockNum = fromHex(txns[0].blockNum);
-  const provider = new ethers.providers.AlchemyProvider(
-    "homestead",
-    process.env.ALCHEMY_TOKEN
+  let txns = res.transfers.filter(
+    (txn) => txn.rawContract.address == nftAddress
   );
 
-  const unixTimestamp = (await provider.getBlock(blockNum)).timestamp; //UNIX!
+  if (txns.length == 0) return { message: "Not a holder" };
+  const blockNumHex = txns[0].blockNum;
+  const blockNumDecimal = fromHex(blockNumHex);
+  const provider = new ethers.providers.AlchemyProvider(
+    providerNetwork,
+    process.env.ALCHEMY_TOKEN
+  );
+  const unixTimestamp = (await provider.getBlock(blockNumDecimal)).timestamp; //UNIX!
+  // __________________________________________________________________________________
+
+  const statusObj = await getStatus(userAddress, unixTimestamp, blockNumHex);
+
   const returnObj = {
-    blockNum: blockNum,
+    blockNum: blockNumDecimal,
     timestamp: unixTimestamp,
+    formattedTime: unixTimestampToDateTime(unixTimestamp),
+    statusObj: statusObj,
   };
 
-  return res;
+  const addressInDB = await getDocuments(userAddress);
+
+  if (chatId && addressInDB == []) {
+    Subscription.createSubscription(
+      chatId,
+      userAddress,
+      unixTimestamp,
+      statusObj.status
+    )
+      .then((newSubscription) => {
+        console.log("New subscription created:", newSubscription);
+        // WRITE TELEGRAM MESSAGE BACK
+      })
+      .catch((error) => {
+        console.error("Error creating subscription:", error);
+      });
+  } else if (addressInDB != []) {
+    if (addressInDB[0].status != statusObj.status) {
+      console.log("Need to update!!!!")
+      Subscription.updateDocument(userAddress, statusObj.status)
+        .then((updatedDocument) => {
+          if (updatedDocument) {
+            console.log("Updated Document:", updatedDocument);
+          } else {
+            console.log("Document not found.");
+          }
+        })
+        .catch((error) => {
+          console.error("Error updating document:", error);
+        });
+    }
+  }
+
+  return returnObj;
+}
+
+async function getStatus(userAddress, unixTimestamp, blockNum) {
+  // NFT has not expired yet! 
+  const isLessThanDays = isLessThanDaysAgo(unixTimestamp, DAYS_AGO);
+  if (isLessThanDays) {
+    return { status: "Initial Mint" };
+  }
+
+  const config = {
+    apiKey: process.env.ALCHEMY_TOKEN,
+    network: NETWORK,
+  };
+  const alchemy = new Alchemy(config);
+  const res = await alchemy.core.getAssetTransfers({
+    fromBlock: blockNum,
+    toAddress: REWARD_ADDRESS,
+    fromAddress: userAddress,
+    excludeZeroValue: true,
+    category: ["external"],
+  });
+
+  let txns = res.transfers.filter(
+    (txn) => txn.value >= SUBSCRIPTION_COST && txn.asset === "ETH"
+  );
+
+  if (txns.length != 0) {
+    const blockNumPayment = fromHex(txns[txns.length - 1].blockNum);
+    const provider = new ethers.providers.AlchemyProvider(
+      providerNetwork,
+      process.env.ALCHEMY_TOKEN
+    );
+    const unixTimestampPayment = (await provider.getBlock(blockNumPayment))
+      .timestamp; //UNIX!
+
+    if (
+      areTimestampsWithinDaysApart(
+        (Date.now() / 1000),
+        unixTimestampPayment,
+        DAYS_AGO
+      )
+    ) {
+      let validThru = unixTimestampInFuture(unixTimestampPayment, DAYS_AGO)
+      validThru = unixTimestampToDateTime(validThru)
+
+      const formattedTimestampPayment =
+        unixTimestampToDateTime(unixTimestampPayment);
+      const statusObj = {
+        unixTimestampPayment: unixTimestampPayment,
+        formattedTimestampPayment: formattedTimestampPayment,
+        blockPayment: blockNumPayment,
+        status: "Paid",
+        validThru: validThru
+      };
+      return statusObj;
+    } else {
+      return {
+        status: "Expired",
+      };
+    }
+  } else {
+    return {
+      status: "Expired",
+    };
+  }
+}
+
+function unixTimestampToDateTime(unixTimestamp) {
+  const milliseconds = unixTimestamp * 1000; // Convert seconds to milliseconds
+  const dateObject = new Date(milliseconds);
+
+  const year = dateObject.getFullYear();
+  const month = (dateObject.getMonth() + 1).toString().padStart(2, "0");
+  const day = dateObject.getDate().toString().padStart(2, "0");
+  const hours = dateObject.getHours().toString().padStart(2, "0");
+  const minutes = dateObject.getMinutes().toString().padStart(2, "0");
+  const seconds = dateObject.getSeconds().toString().padStart(2, "0");
+
+  const formattedDateTime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+  return formattedDateTime;
+}
+
+function isLessThanDaysAgo(unixTimestamp, daysAgo) {
+  const currentTimestamp = Math.floor(Date.now() / 1000); // Get current Unix timestamp
+  const secondsInADay = 24 * 60 * 60; // Number of seconds in a day
+
+  return currentTimestamp - unixTimestamp < daysAgo * secondsInADay;
+}
+
+function areTimestampsWithinDaysApart(timestamp1, timestamp2, daysApart) {
+  const secondsPerDay = 24 * 60 * 60; // Number of seconds in a day
+  const timeDifference = Math.abs(timestamp1 - timestamp2);
+  const daysDifference = timeDifference / secondsPerDay;
+  return daysDifference <= Math.abs(daysApart);
+}
+
+function unixTimestampInFuture(baseTimestamp, daysInFuture) {
+  const baseTimestampMilliseconds = baseTimestamp * 1000;
+  const millisecondsInDay = 24 * 60 * 60 * 1000;
+  const millisecondsToAdd = daysInFuture * millisecondsInDay;
+  const futureTimestampMilliseconds = baseTimestampMilliseconds + millisecondsToAdd;
+  const futureTimestampSeconds = Math.floor(futureTimestampMilliseconds / 1000);
+  return futureTimestampSeconds;
+}
+
+async function getDocuments(address) {
+  try {
+    const documents = await Subscription.findByAddress(address).exec();
+    return documents;
+  } catch (error) {
+    console.error("Error fetching documents:", error);
+  }
 }

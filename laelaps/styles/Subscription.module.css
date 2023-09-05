@@ -1,0 +1,166 @@
+@font-face {
+    font-family: "main-text";
+    src: url("./fonts/CapitalisTypOasis.ttf");
+  }
+  
+  .gif {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* border: 2px solid #faf68f; */
+  
+  }
+  
+  .gifImage {
+    width: 30vh;
+    height: 30vh; 
+  }
+  
+  .square {
+    display: flex;
+    width: 80%;
+    margin: 0 auto;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    border-color: #f1cb53;
+    border: 20px;
+  }
+  
+  .textMain {
+    margin: auto;
+    text-align: center;
+    padding: 50px;
+    padding-bottom: 90px;
+    color: black;
+    font-family: "title";
+    font-size: 3vw;
+  }
+  
+  .title {
+    color: #8b0000;
+    font-family: "title";
+    font-size: 4vw; /* Adjust the value as per your preference */
+  }
+  
+  @media (max-width: 768px) {
+    /* Adjust the breakpoint as per your preference */
+    .title {
+      font-size: 7vw; /* Adjust the value as per your preference */
+    }
+    .textMain {
+      font-size: 5vw;
+    }
+    .gifImage {
+      width: 20vh;
+      height: 20vh;
+    }
+    .mintButton {
+      font-size: 4vh !important; /* Added !important to override conflicting declarations */
+      height: 6vh;
+    }
+  
+    .box {
+      font-size: 2vh;
+    }
+  
+    .gifRow {
+    display: flex; /* Use flexbox to create a row layout */
+    flex-direction: column; /* Allow items to wrap onto multiple lines */
+      background-color: black;
+  }
+  }
+  
+  .mintButton {
+    font-family: "title" !important;
+    background-color: #faf68f !important;
+    height: auto !important;
+    color: black !important;
+    font-family: "title" !important;
+    font-size: 4vh !important ;
+    cursor: pointer !important;
+  }
+  
+  .mintButton:hover {
+        background-color: brown;
+        color: whitesmoke
+  ;
+  }
+  
+  .loadingText {
+    font-family: "title";
+    color: black;
+    font-size: 8vh;
+  }
+  
+  
+  .valuesContainer {
+    white-space: nowrap;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  .box {
+    width: auto;
+    height: auto;
+    background-color: #e0e0e0;
+    border: 1px solid black;
+    color: black;
+    font-family: "title";
+    padding: 8px;
+    margin-right: 8px;
+    margin-bottom: 8px;
+  }
+  
+  
+  .gifRow {
+    display: flex; /* Use flexbox to create a row layout */
+    flex-wrap: wrap; /* Allow items to wrap onto multiple lines */
+    justify-content: space-between;
+  
+  }
+  .dataTable {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+  }
+  
+  .dataTable th, .dataTable td {
+    padding: 20px; /* Increase padding for more spacing */
+    border: 1px solid #ccc;
+    text-align: center;
+    color: black;
+  }
+  
+  .dataTable th {
+    background-color: #8b0000;
+    color: white;
+    font-size: 18px; /* Increase font size for column headers */
+    font-weight: bold;
+  }
+  
+  /* Customize styles for different status values */
+  .expired {
+    color: red;
+  }
+  
+  .paid {
+    color: green;
+  }
+  
+  .initialMint {
+    color: green;
+  }
+  .valuesContainer {
+    margin-top: 20px;
+  }
+
+  .image {
+    display: flex;
+    justify-content: center; /* Center horizontally along the x-axis */
+    align-items: center; /* Center vertically along the y-axis */
+    height: 30vh; /* Make sure the body covers the entire viewport height */
+    margin: 0; /* Remove default margin */
+    background-color: #f0f0f0; /* Optional background color */
+  }

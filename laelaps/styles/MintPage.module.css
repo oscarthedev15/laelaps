@@ -120,3 +120,25 @@
   justify-content: space-between;
 
 }
+
+.dataTable {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.dataTable th, .dataTable td {
+  padding: 90px; /* Increase padding for more spacing */
+  border: 1px solid #ccc;
+  text-align: center;
+}
+
+.dataTable th {
+  background-color: #f2f2f2;
+  font-size: 18px; /* Increase font size for column headers */
+  font-weight: bold;
+}
+
+.valuesContainer {
+  margin-top: 20px;
+}
