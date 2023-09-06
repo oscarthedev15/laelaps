@@ -53,11 +53,12 @@ export async function getNFTinfo(userAddress, nftAddress, chatId, bot) {
 
   const addressInDB = await getDocuments(userAddress);
 
-  if (chatId && addressInDB == []) {
+  if (chatId && addressInDB.length == 0) {
     Subscription.createSubscription(
       chatId,
       userAddress,
-      unixTimestamp,
+      unixTimestamp, //NFT received date
+      statusObj.validThru,
       statusObj.status
     )
       .then((newSubscription) => {
@@ -67,31 +68,54 @@ export async function getNFTinfo(userAddress, nftAddress, chatId, bot) {
       .catch((error) => {
         console.error("Error creating subscription:", error);
       });
-  } else if (addressInDB != []) {
-    if (addressInDB[0].status != statusObj.status) {
-      console.log("Need to update!!!!")
-      Subscription.updateDocument(userAddress, statusObj.status)
-        .then((updatedDocument) => {
-          if (updatedDocument) {
-            console.log("Updated Document:", updatedDocument);
-          } else {
-            console.log("Document not found.");
-          }
-        })
-        .catch((error) => {
-          console.error("Error updating document:", error);
-        });
+  } else if (addressInDB.length > 0) {
+    if (
+      addressInDB[0].status != statusObj.status ||
+      addressInDB[0].validThru != statusObj.validThru
+    ) {
+      console.log("Need to update!!!!");
+      if (addressInDB[0].status != statusObj.status) {
+        Subscription.updateDocument(userAddress, 'status', statusObj.status)
+          .then((updatedDocument) => {
+            if (updatedDocument) {
+              console.log("Updated Document:", updatedDocument);
+            } else {
+              console.log("Document not found.");
+            }
+          })
+          .catch((error) => {
+            console.error("Error updating document:", error);
+          });
+      }
+      else {
+        Subscription.updateDocument(userAddress, 'validThru', statusObj.validThru)
+          .then((updatedDocument) => {
+            if (updatedDocument) {
+              console.log("Updated Document:", updatedDocument);
+            } else {
+              console.log("Document not found.");
+            }
+          })
+          .catch((error) => {
+            console.error("Error updating document:", error);
+          });
+      
+      }
     }
+    
   }
 
   return returnObj;
 }
 
-async function getStatus(userAddress, unixTimestamp, blockNum) {
-  // NFT has not expired yet! 
-  const isLessThanDays = isLessThanDaysAgo(unixTimestamp, DAYS_AGO);
+async function getStatus(userAddress, mintUnixTimetamp, blockNum) {
+  // NFT has not expired yet!
+  const isLessThanDays = isLessThanDaysAgo(mintUnixTimetamp, DAYS_AGO);
   if (isLessThanDays) {
-    return { status: "Initial Mint" };
+    return {
+      status: "Active",
+      validThru: unixTimestampInFuture(mintUnixTimetamp, DAYS_AGO),
+    };
   }
 
   const config = {
@@ -122,13 +146,13 @@ async function getStatus(userAddress, unixTimestamp, blockNum) {
 
     if (
       areTimestampsWithinDaysApart(
-        (Date.now() / 1000),
+        Date.now() / 1000,
         unixTimestampPayment,
         DAYS_AGO
       )
     ) {
-      let validThru = unixTimestampInFuture(unixTimestampPayment, DAYS_AGO)
-      validThru = unixTimestampToDateTime(validThru)
+      let validThru = unixTimestampInFuture(unixTimestampPayment, DAYS_AGO);
+      validThru = unixTimestampToDateTime(validThru);
 
       const formattedTimestampPayment =
         unixTimestampToDateTime(unixTimestampPayment);
@@ -136,18 +160,20 @@ async function getStatus(userAddress, unixTimestamp, blockNum) {
         unixTimestampPayment: unixTimestampPayment,
         formattedTimestampPayment: formattedTimestampPayment,
         blockPayment: blockNumPayment,
-        status: "Paid",
-        validThru: validThru
+        status: "Active",
+        validThru: validThru,
       };
       return statusObj;
     } else {
       return {
         status: "Expired",
+        validThru: unixTimestampInFuture(mintUnixTimetamp, DAYS_AGO),
       };
     }
   } else {
     return {
       status: "Expired",
+      validThru: unixTimestampInFuture(mintUnixTimetamp, DAYS_AGO),
     };
   }
 }
@@ -185,7 +211,8 @@ function unixTimestampInFuture(baseTimestamp, daysInFuture) {
   const baseTimestampMilliseconds = baseTimestamp * 1000;
   const millisecondsInDay = 24 * 60 * 60 * 1000;
   const millisecondsToAdd = daysInFuture * millisecondsInDay;
-  const futureTimestampMilliseconds = baseTimestampMilliseconds + millisecondsToAdd;
+  const futureTimestampMilliseconds =
+    baseTimestampMilliseconds + millisecondsToAdd;
   const futureTimestampSeconds = Math.floor(futureTimestampMilliseconds / 1000);
   return futureTimestampSeconds;
 }

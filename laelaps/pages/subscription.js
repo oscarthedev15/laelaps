@@ -96,7 +96,7 @@ export default function Utility() {
             <br />
 
             <br />
-            {times.statusObj && times.statusObj.status == "Expired" && (
+            {times.statusObj  && (
               <Web3Button
                 contractAddress={nftAddress}
                 action={(contract) =>

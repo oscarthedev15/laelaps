@@ -1,4 +1,4 @@
-import { Schema as _Schema, model } from "mongoose";
+import { Schema as _Schema, model, mongoose } from "mongoose";
 const Schema = _Schema;
 
 const subscriptionSchema = new Schema(
@@ -15,6 +15,10 @@ const subscriptionSchema = new Schema(
       type: String,
       required: true,
     },
+    validThru: {
+      type: String,
+      required: true,
+    },
     status: {
       type: String,
       required: true,
@@ -27,7 +31,7 @@ const subscriptionSchema = new Schema(
 
 subscriptionSchema.statics = {
   findByChatId(chatId) {
-    return this.find({ chatId: chatId });
+    return this.find({ chatId: chatId });    
   },
   findByAddress(address) {
     return this.find({ address: address });
@@ -35,25 +39,28 @@ subscriptionSchema.statics = {
   findByStatus(status) {
     return this.find({ status: status });
   },
-  createSubscription(chatId, address, date, status) {
+  createSubscription(chatId, address, date, validThru, status) {
     const newSubscription = new this({
       chatId: chatId,
       address: address,
       date: date,
+      validThru: validThru,
       status: status,
     });
     return newSubscription.save();
   },
-  updateDocument(address, newStatus) {
-    return this.findOneAndUpdate(
+  async updateDocument(address, fieldToUpdate, newValue) {
+    const updateQuery = { [fieldToUpdate]: newValue };
+    const updatedDocument = await this.findOneAndUpdate(
       { address: address },
-      { $set: { status: newStatus } },
+      { $set: updateQuery },
       { new: true }
     );
+    return updatedDocument;
   },
   
 };
 
-const Subscription = model("Subscription", subscriptionSchema);
+const Subscription = mongoose.models.Subscription || model("Subscription", subscriptionSchema) ;
 
 export default Subscription;
