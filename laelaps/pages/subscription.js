@@ -38,7 +38,7 @@ export default function Utility() {
     (async () => {
       const chatId = router.query.chatId;
       const bot = router.query.bot;
-      if (!isMismatched && userAddress) {
+      if (!isMismatched && userAddress && price) {
         const response = await fetch("/api/subscription", {
           method: "POST",
           headers: {
@@ -49,6 +49,7 @@ export default function Utility() {
             nftAddress,
             chatId,
             bot,
+            price
           }),
         });
         const times = await response.json();
@@ -57,7 +58,7 @@ export default function Utility() {
         await switchChain(Goerli.chainId);
       }
     })();
-  }, [isMismatched, switchChain, userAddress]);
+  }, [isMismatched, switchChain, userAddress, isLoading, data]);
 
   return (
     <div className={styles.square}>

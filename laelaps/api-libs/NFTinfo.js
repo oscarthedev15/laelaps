@@ -10,7 +10,7 @@ import mongoose from "./db.js";
 
 const REWARD_ADDRESS =
   "0x48bffd60686b8259887862d0e73ac2087d446a5f";
-const SUBSCRIPTION_COST = 0.00000000000001;
+// const SUBSCRIPTION_COST = 0.00000000000001;
 
 const NETWORK = Network.ETH_GOERLI;
 const DAYS_AGO = 0.01;
@@ -37,7 +37,8 @@ export async function getNFTinfo(
   userAddress,
   nftAddress,
   chatId,
-  bot
+  bot,
+  price
 ) {
   const config = {
     apiKey: process.env.ALCHEMY_TOKEN,
@@ -84,7 +85,8 @@ export async function getNFTinfo(
   const statusObj = await getStatus(
     userAddress,
     unixTimestamp,
-    blockNumHex
+    blockNumHex, 
+    price
   );
 
   const returnObj = {
@@ -193,7 +195,8 @@ export async function getNFTinfo(
 async function getStatus(
   userAddress,
   mintUnixTimetamp,
-  blockNum
+  blockNum, 
+  price
 ) {
   // NFT has not expired yet!
   const isLessThanDays =
@@ -226,10 +229,14 @@ async function getStatus(
         category: ["external"],
       }
     );
+    
+  
+  const weiValue = ethers.utils.parseUnits(price.toString(), "wei");
+  const etherValue = ethers.utils.formatEther(weiValue);
 
   let txns = res.transfers.filter(
     (txn) =>
-      txn.value >= SUBSCRIPTION_COST &&
+      txn.value >= etherValue &&
       txn.asset === "ETH"
   );
 
