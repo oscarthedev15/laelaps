@@ -10,4 +10,5 @@ export default async function handler(req, res) {
   const nftInfo = await getNFTinfo(userAddress, nftAddress, chatId, botId);
 
   res.json(nftInfo);
+  
 }
