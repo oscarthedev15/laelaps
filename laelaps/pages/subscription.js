@@ -303,8 +303,11 @@ export default function Utility() {
                         inactive
                       </span>
                       ! Make a payment
-                      of [price] to
-                      renew your
+                      of{" "}
+                      {ethers.utils.formatEther(
+                        price
+                      )}{" "}
+                      ETH to renew your
                       subscription.
                     </div>
                   ) : (
@@ -426,9 +429,11 @@ export default function Utility() {
                           If you wish,
                           you can make
                           an early
-                          payment of
-                          [price] on
-                          this
+                          payment of{" "}
+                          {ethers.utils.formatEther(
+                            price
+                          )}{" "}
+                          ETH on this
                           subscription.
                         </p>
                       </div>
