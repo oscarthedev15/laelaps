@@ -21,6 +21,11 @@ import {
   toNumber,
 } from "ethers";
 var pluralize = require("pluralize");
+import {
+  useContractRead,
+  useContract,
+} from "@thirdweb-dev/react";
+import { fromHex } from "alchemy-sdk";
 
 const nftAddress =
   "0x48bffd60686b8259887862d0e73ac2087d446a5f";
@@ -46,6 +51,25 @@ export default function Utility() {
   const [message, setMessage] =
     useState();
 
+  const [price, setPrice] = useState();
+
+  const { contract } =
+    useContract(nftAddress);
+  const { data, isLoading, error } =
+    useContractRead(
+      contract,
+      "mint_price"
+    );
+
+  useEffect(() => {
+    if (
+      !isLoading &&
+      data !== undefined
+    ) {
+      setPrice(fromHex(data));
+    }
+  }, [isLoading, data]);
+
   function getTimeTillExp() {
     const milliseconds =
       times.statusObj.validThru * 1000; // Convert seconds to milliseconds
@@ -69,8 +93,6 @@ export default function Utility() {
         (1000 * 60)
     );
 
-    console.log("here 2");
-
     setExpCountdown([
       days,
       hours,
@@ -85,7 +107,8 @@ export default function Utility() {
       const bot = router.query.bot;
       if (
         !isMismatched &&
-        userAddress
+        userAddress &&
+        price
       ) {
         const response = await fetch(
           "/api/subscription",
@@ -100,14 +123,13 @@ export default function Utility() {
               nftAddress,
               chatId,
               bot,
+              price,
             }),
           }
         );
         const times =
           await response.json();
         setTimes(times);
-
-        console.log(times);
       } else if (
         isMismatched &&
         userAddress
@@ -121,7 +143,6 @@ export default function Utility() {
     var interval = 0;
 
     if (times?.statusObj?.validThru) {
-      console.log("here");
       interval = setInterval(
         getTimeTillExp,
         1000
@@ -134,7 +155,10 @@ export default function Utility() {
     isMismatched,
     switchChain,
     userAddress,
+    isLoading,
+    data,
     times,
+    price,
   ]);
 
   if (
@@ -423,10 +447,7 @@ export default function Utility() {
                           [],
                           {
                             value:
-                              ethers.utils.parseUnits(
-                                SUBSCRIPTION_COST,
-                                "ether"
-                              ),
+                              price,
                           }
                         )
                       }
