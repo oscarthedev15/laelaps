@@ -1,167 +1,497 @@
-import React, { useState, useEffect } from "react";
+import React, {
+  useState,
+  useEffect,
+} from "react";
 import { ConnectWallet } from "@thirdweb-dev/react";
 import styles from "../styles/Subscription.module.css";
-import { useSwitchChain } from "@thirdweb-dev/react";
+import {
+  useSwitchChain,
+  useConnectionStatus,
+} from "@thirdweb-dev/react";
 import { useNetworkMismatch } from "@thirdweb-dev/react";
-import { Ethereum, Goerli } from "@thirdweb-dev/chains";
+import {
+  Ethereum,
+  Goerli,
+} from "@thirdweb-dev/chains";
 import { useAddress } from "@thirdweb-dev/react";
 import { useRouter } from "next/router";
 import { Web3Button } from "@thirdweb-dev/react";
-import { ethers, toNumber } from "ethers";
-import { useContractRead, useContract } from "@thirdweb-dev/react";
+import {
+  ethers,
+  toNumber,
+} from "ethers";
+var pluralize = require("pluralize");
+import {
+  useContractRead,
+  useContract,
+} from "@thirdweb-dev/react";
 import { fromHex } from "alchemy-sdk";
 
-const nftAddress = "0x48bffd60686b8259887862d0e73ac2087d446a5f";
+const nftAddress =
+  "0x48bffd60686b8259887862d0e73ac2087d446a5f";
 const network = Goerli;
-const SUBSCRIPTION_COST = "0.00000000000001";
+const SUBSCRIPTION_COST =
+  "0.00000000000001";
 
 export default function Utility() {
-  const [times, setTimes] = useState({});
+  const [times, setTimes] = useState(
+    {}
+  );
+  const [
+    expCountdown,
+    setExpCountdown,
+  ] = useState(["--", "--", "--"]);
   const switchChain = useSwitchChain();
-  const isMismatched = useNetworkMismatch();
+  const connectionStatus =
+    useConnectionStatus();
+  const isMismatched =
+    useNetworkMismatch();
   const userAddress = useAddress();
   const router = useRouter();
-  const [message, setMessage] = useState();
+  const [message, setMessage] =
+    useState();
 
   const [price, setPrice] = useState();
 
-  const { contract } = useContract(nftAddress);
-  const { data, isLoading, error } = useContractRead(contract, "mint_price");
+  const { contract } =
+    useContract(nftAddress);
+  const { data, isLoading, error } =
+    useContractRead(
+      contract,
+      "mint_price"
+    );
 
   useEffect(() => {
-    if (!isLoading && data !== undefined) {
+    if (
+      !isLoading &&
+      data !== undefined
+    ) {
       setPrice(fromHex(data));
     }
   }, [isLoading, data]);
 
+  function getTimeTillExp() {
+    const milliseconds =
+      times.statusObj.validThru * 1000; // Convert seconds to milliseconds
+    const countDownDate = new Date(
+      milliseconds
+    );
+
+    var now = new Date().getTime();
+    var timeleft = countDownDate - now;
+
+    var days = Math.floor(
+      timeleft / (1000 * 60 * 60 * 24)
+    );
+    var hours = Math.floor(
+      (timeleft %
+        (1000 * 60 * 60 * 24)) /
+        (1000 * 60 * 60)
+    );
+    var minutes = Math.floor(
+      (timeleft % (1000 * 60 * 60)) /
+        (1000 * 60)
+    );
+
+    setExpCountdown([
+      days,
+      hours,
+      minutes,
+    ]);
+  }
+
   useEffect(() => {
     (async () => {
-      const chatId = router.query.chatId;
+      const chatId =
+        router.query.chatId;
       const bot = router.query.bot;
-      if (!isMismatched && userAddress && price) {
-        const response = await fetch("/api/subscription", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            userAddress,
-            nftAddress,
-            chatId,
-            bot,
-            price
-          }),
-        });
-        const times = await response.json();
+      if (
+        !isMismatched &&
+        userAddress &&
+        price
+      ) {
+        const response = await fetch(
+          "/api/subscription",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type":
+                "application/json",
+            },
+            body: JSON.stringify({
+              userAddress,
+              nftAddress,
+              chatId,
+              bot,
+              price,
+            }),
+          }
+        );
+        const times =
+          await response.json();
         setTimes(times);
-      } else if (isMismatched && userAddress) {
-        await switchChain(Goerli.chainId);
+      } else if (
+        isMismatched &&
+        userAddress
+      ) {
+        await switchChain(
+          Goerli.chainId
+        );
       }
     })();
-  }, [isMismatched, switchChain, userAddress, isLoading, data]);
+
+    var interval = 0;
+
+    if (times?.statusObj?.validThru) {
+      interval = setInterval(
+        getTimeTillExp,
+        1000
+      );
+    }
+
+    return () =>
+      clearInterval(interval);
+  }, [
+    isMismatched,
+    switchChain,
+    userAddress,
+    isLoading,
+    data,
+    times,
+    price,
+  ]);
+
+  if (
+    connectionStatus ===
+      "disconnected" ||
+    connectionStatus === "unknown"
+  ) {
+    return (
+      <div className="flex justify-center items-center h-[80vh] w-full">
+        <div className="flex flex-col gap-6 items-center justify-center min-w-[400px] p-6 bg-white border-2 border-[#9a4737] rounded-3xl shadow-[5px_5px_0px_0px_rgba(146,69,53,1)] ">
+          <p className="text-black text-lg w-3/4 text-center font-prozaReg">
+            Please connect your wallet
+            to continue.
+          </p>
+          <ConnectWallet className="!text-2xl !bg-[#cc624a3b] !text-[#cc624a] !font-quattBold !px-4 hover:!bg-[#cc624a47]" />
+        </div>
+      </div>
+    );
+  }
+
+  if (Object.keys(times).length === 0) {
+    return (
+      <div className="flex justify-center items-center h-[80vh] w-full">
+        <p className="text-black text-lg w-3/4 text-center font-prozaReg">
+          Loading...
+        </p>
+      </div>
+    );
+  }
 
   return (
     <div className={styles.square}>
       <ConnectWallet />
+
       <br />
       <div className=" w-4/5">
         {times.message ? (
-          <div className={styles.textMain}>{times.message}</div>
+          <div
+            className={styles.textMain}
+          >
+            {times.message}
+          </div>
         ) : (
           <>
             <div className="flex flex-col gap-8 w-full">
               <div className="flex flex-row gap-8 items-center mt-5">
-                <div className="text-3xl text-[#8b0000] font-bold">
+                <div className=" text-5xl text-[#682c22ff] font-quattBold">
                   Your Membership
                 </div>
                 <span
-                  className={`inline-flex uppercase font-bold tracking-widest items-center rounded-full px-4 py-2 text-lg ${
-                    times?.statusObj?.status === "Expired" &&
-                    "bg-red-500 ring-red-500/10 text-white ring-1 ring-inset"
+                  className={`inline-flex font-prozaBold tracking-wider uppercase items-center gap-x-2 rounded-full px-4 py-2 text-lg ${
+                    times?.statusObj
+                      ?.status ===
+                      "Expired" &&
+                    "bg-red-100/90 ring-red-600/10 text-red-700 ring-1 ring-inset"
                   } ${
-                    times?.statusObj?.status === "Active" &&
-                    "bg-green-500 ring-green-500/10 text-white ring-1 ring-inset"
+                    times?.statusObj
+                      ?.status ===
+                      "Active" &&
+                    "bg-green-100/90 ring-green-600/10 text-green-700 ring-1 ring-inset"
                   }`}
                 >
-                  {times?.statusObj?.status}
+                  {times?.statusObj
+                    ?.status ===
+                  "Expired" ? (
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                      className="w-5 h-5"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-8-5a.75.75 0 01.75.75v4.5a.75.75 0 01-1.5 0v-4.5A.75.75 0 0110 5zm0 10a1 1 0 100-2 1 1 0 000 2z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  ) : (
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      viewBox="0 0 20 20"
+                      fill="currentColor"
+                      className="w-5 h-5"
+                    >
+                      <path
+                        fillRule="evenodd"
+                        d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.857-9.809a.75.75 0 00-1.214-.882l-3.483 4.79-1.88-1.88a.75.75 0 10-1.06 1.061l2.5 2.5a.75.75 0 001.137-.089l4-5.5z"
+                        clipRule="evenodd"
+                      />
+                    </svg>
+                  )}
+
+                  {
+                    times?.statusObj
+                      ?.status
+                  }
                 </span>
               </div>
-              <div>
-                <div className="text-xl text-black font-bold -mt-6">
-                  <a href="google.com" className="text-black underline">
-                    Joined
-                  </a>{" "}
-                  {times.formattedTime}
-                </div>
+
+              <div className="text-base text-black font-prozaReg -mt-7">
+                Joined{" "}
+                {times.mintDateObj
+                  .month +
+                  " " +
+                  times.mintDateObj
+                    .day +
+                  ", " +
+                  times.mintDateObj
+                    .year}
+              </div>
+              <div className="text-base text-black font-prozaReg -mt-7">
+                Txn hash:{"  "}
+                <a
+                  href={
+                    process.env
+                      .NEXT_PUBLIC_ETHERSCAN_BASE_URL +
+                    times.txnHash
+                  }
+                  className="font-prozaSemi text-black hover:underline"
+                >
+                  {times.txnHash.slice(
+                    0,
+                    6
+                  ) +
+                    "..." +
+                    times.txnHash.slice(
+                      -4
+                    )}
+                </a>
               </div>
 
-              {Object.keys(times).length != 0 ? (
-                <div className="inline-flex items-center justify-center p-10 bg-white gap-4 w-full h-full rounded-3xl shadow-[-10px_-10px_30px_4px_rgba(0,0,0,0.1),_10px_10px_30px_4px_rgba(45,78,255,0.15)]">
-                  <img
-                    src={"./images/leano.png"}
-                    className="h-[400px] w-auto"
-                  />
-
-                  <div className="flex flex-col gap-10 w-full">
-                    {/* <div className="flex flex-col gap-2">
-                      <div className="text-xl text-black font-bold">
-                        Joined{" "}
-                        {
-                          times.formattedTime
-                        }
-                      </div>
-
-                      <div className="text-lg text-gray-600 text-ellipsis">
-                        transaction link
-                      </div>
-                    </div> */}
-                    <div className="flex flex-col gap-6 items-center self-center border-2 border-[#8b0000] rounded-3xl shadow-[-10px_-10px_30px_4px_rgba(0,0,0,0.1),_10px_10px_30px_4px_rgba(45,78,255,0.15)] p-6 mx-16">
-                      {times?.statusObj?.status === "Expired" ? (
-                        <div className="text-black text-xl text-center">
-                          Looks like your subscription is <b>inactive</b>! Make
-                          a payment to continue using the bot.
-                        </div>
-                      ) : (
-                        <div className="text-black text-xl text-center whitespace-pre-wrap">
-                          <p>
-                            Last Payment on{" "}
-                            <b>{times?.statusObj?.formattedTimestampPayment}</b>
-                          </p>
-                          <p>
-                            Expiration on <b>{times?.statusObj?.validThru}</b>
-                          </p>
-                          If you wish, you can make an early payment on this
-                          subscription.
-                        </div>
-                      )}
-                      {times.statusObj && (
-                        <Web3Button
-                          contractAddress={nftAddress}
-                          action={(contract) =>
-                            contract.call("paySubscription", [], {
-                              value: price,
-                            })
-                          }
-                          onError={(error) => {
-                            if (error.message.includes("Insufficient funds")) {
-                              alert("Insufficient user funds");
-                            } else {
-                              alert("Error in mint");
-                              console.log("*********");
-                              console.log(error);
-                            }
-                          }}
-                          onSuccess={(result) => {
-                            alert("Payment Processed");
-                            location.reload();
-                          }}
-                          className="!bg-[#8b0000] !text-white !text-3xl !rounded-3xl !px-10"
-                        >
-                          Make Payment
-                        </Web3Button>
-                      )}
+              {Object.keys(times)
+                .length != 0 ? (
+                <div className="flex flex-col gap-6 items-center self-center w-full mx-16 p-6 bg-white font-prozaReg border-2 border-[#9a4737] rounded-3xl shadow-[5px_5px_0px_0px_rgba(146,69,53,1)] ">
+                  {times?.statusObj
+                    ?.status ===
+                  "Expired" ? (
+                    <div className="text-black text-xl text-center">
+                      Looks like your
+                      subscription is{" "}
+                      <span className=" font-prozaSemi">
+                        inactive
+                      </span>
+                      ! Make a payment
+                      of{" "}
+                      {ethers.utils.formatEther(
+                        price
+                      )}{" "}
+                      ETH to renew your
+                      subscription.
                     </div>
-                  </div>
+                  ) : (
+                    <>
+                      <div className="flex flex-col gap-6 items-center">
+                        <div className="flex flex-col gap-4 items-center">
+                          <p className="text-black text-lg uppercase tracking-tightest text-center font-prozaSemi">
+                            Last Payment
+                            made on
+                          </p>
+                          <div className="text-[#cc624a] font-quattBold text-4xl">
+                            {
+                              times
+                                .statusObj
+                                .lastPaymentDateObj
+                                .month
+                            }{" "}
+                            {
+                              times
+                                .statusObj
+                                .lastPaymentDateObj
+                                .day
+                            }
+                          </div>
+                          <div className="text-base text-black font-prozaItal -mt-2">
+                            Txn hash:
+                            {"  "}
+                            <a
+                              href={
+                                process
+                                  .env
+                                  .NEXT_PUBLIC_ETHERSCAN_BASE_URL +
+                                times
+                                  .statusObj
+                                  .txnHash
+                              }
+                              className="font-prozaSemi text-black hover:underline"
+                            >
+                              {times.statusObj.txnHash.slice(
+                                0,
+                                6
+                              ) +
+                                "..." +
+                                times.statusObj.txnHash.slice(
+                                  -4
+                                )}
+                            </a>
+                          </div>
+                        </div>
+                        <hr className="w-3/5 border-[#cc624a] " />
+                        <div className="flex flex-col gap-4 items-center">
+                          <p className="text-black text-lg uppercase tracking-tightest text-center font-prozaSemi">
+                            Next payment
+                            due in
+                          </p>
+                          <div className="flex flex-row gap-4">
+                            <div className="text-center flex w-32 h-36 justify-center items-center text-[#cc624a] border-[#cc624a] border-2 ">
+                              <div className="flex flex-col">
+                                <div className="font-quattBold text-7xl">
+                                  {
+                                    expCountdown[0]
+                                  }
+                                </div>
+                                <div className="font-quattReg text-2xl">
+                                  {pluralize(
+                                    "day",
+                                    expCountdown[0]
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+                            <div className="text-center flex w-32 h-36 justify-center items-center text-[#cc624a] border-[#cc624a] border-2 ">
+                              <div className="flex flex-col">
+                                <div className="font-quattBold text-7xl">
+                                  {
+                                    expCountdown[1]
+                                  }
+                                </div>
+                                <div className="font-quattReg text-2xl">
+                                  {pluralize(
+                                    "hour",
+                                    expCountdown[1]
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+                            <div className="text-center flex w-32 h-36 justify-center items-center text-[#cc624a] border-[#cc624a] border-2 ">
+                              <div className="flex flex-col">
+                                <div className="font-quattBold text-7xl">
+                                  {
+                                    expCountdown[2]
+                                  }
+                                </div>
+                                <div className="font-quattReg text-2xl">
+                                  {pluralize(
+                                    "minute",
+                                    expCountdown[2]
+                                  )}
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                          <div className="text-base text-black font-prozaItal -mt-2">
+                            Valid
+                            through
+                            {"  "}
+                            <span className="font-prozaSemi text-black">
+                              {
+                                times
+                                  .statusObj
+                                  .validThruHumanDate
+                              }
+                            </span>
+                          </div>
+                        </div>
+                        <hr className="mt-2 w-3/5 border-[#cc624a] " />
+
+                        <p className="text-base text-center text-black font-prozaItal mt-2">
+                          If you wish,
+                          you can make
+                          an early
+                          payment of{" "}
+                          {ethers.utils.formatEther(
+                            price
+                          )}{" "}
+                          ETH on this
+                          subscription.
+                        </p>
+                      </div>
+                    </>
+                  )}
+                  {times.statusObj && (
+                    <Web3Button
+                      contractAddress={
+                        nftAddress
+                      }
+                      action={(
+                        contract
+                      ) =>
+                        contract.call(
+                          "paySubscription",
+                          [],
+                          {
+                            value:
+                              price,
+                          }
+                        )
+                      }
+                      onError={(
+                        error
+                      ) => {
+                        if (
+                          error.message.includes(
+                            "Insufficient funds"
+                          )
+                        ) {
+                          alert(
+                            "Insufficient user funds"
+                          );
+                        } else {
+                          alert(
+                            "Error in mint"
+                          );
+                          console.log(
+                            "*********"
+                          );
+                          console.log(
+                            error
+                          );
+                        }
+                      }}
+                      onSuccess={(
+                        result
+                      ) => {
+                        alert(
+                          "Payment Processed"
+                        );
+                        location.reload();
+                      }}
+                      className="!bg-[#cc624a3b] !text-[#cc624a] !text-3xl !font-quattBold !rounded-3xl hover:!bg-[#cc624a47] !px-10"
+                    >
+                      Make Payment
+                    </Web3Button>
+                  )}
                 </div>
               ) : (
                 <div>Loading</div>
@@ -171,7 +501,9 @@ export default function Utility() {
         )}
       </div>
 
-      <div className={styles.textMain}>{message}</div>
+      <div className={styles.textMain}>
+        {message}
+      </div>
     </div>
   );
 }

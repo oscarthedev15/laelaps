@@ -2,6 +2,41 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: "QuattrocentoRegular";
+  src: url("../styles/fonts/Quattrocento/Quattrocento-Regular.ttf");
+}
+
+@font-face {
+  font-family: "QuattrocentoBold";
+  src: url("../styles/fonts/Quattrocento/Quattrocento-Bold.ttf");
+}
+
+@font-face {
+  font-family: "ProzaLibreRegular";
+  src: url("../styles/fonts/Proza_Libre/ProzaLibre-Regular.ttf");
+}
+
+@font-face {
+  font-family: "ProzaLibreItalic";
+  src: url("../styles/fonts/Proza_Libre/ProzaLibre-Italic.ttf");
+}
+
+@font-face {
+  font-family: "ProzaLibreMedium";
+  src: url("../styles/fonts/Proza_Libre/ProzaLibre-Medium.ttf");
+}
+
+@font-face {
+  font-family: "ProzaLibreSemiBold";
+  src: url("../styles/fonts/Proza_Libre/ProzaLibre-SemiBold.ttf");
+}
+
+@font-face {
+  font-family: "ProzaLibreBold";
+  src: url("../styles/fonts/Proza_Libre/ProzaLibre-Bold.ttf");
+}
+
 html,
 body {
   padding: 0;

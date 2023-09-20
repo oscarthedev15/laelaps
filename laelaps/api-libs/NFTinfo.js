@@ -19,18 +19,18 @@ const providerNetwork = "goerli";
 // const providerNetwork = "homestead"
 
 const MONTHS = [
-  "January",
-  "February",
+  "Jan",
+  "Feb",
   "March",
   "April",
   "May",
-  "june",
+  "June",
   "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December",
+  "Aug",
+  "Sept",
+  "Oct",
+  "Nov",
+  "Dec",
 ];
 
 export async function getNFTinfo(
@@ -93,7 +93,7 @@ export async function getNFTinfo(
     blockNum: blockNumDecimal,
     txnHash: txnHash,
     timestamp: unixTimestamp,
-    formattedTime: unixToHumanDay(
+    mintDateObj: unixToHumanDate(
       unixTimestamp
     ),
     statusObj: statusObj,
@@ -207,7 +207,7 @@ async function getStatus(
   if (isLessThanDays) {
     return {
       status: "Active",
-      validThru: unixToHumanDayAndTime(
+      validThru: unixTimestampInFuture(
         mintUnixTimetamp,
         DAYS_AGO
       ),
@@ -244,6 +244,10 @@ async function getStatus(
     const blockNumPayment = fromHex(
       txns[txns.length - 1].blockNum
     );
+
+    const txnHash =
+      txns[txns.length - 1].hash;
+
     const provider =
       new ethers.providers.AlchemyProvider(
         providerNetwork,
@@ -267,23 +271,26 @@ async function getStatus(
           unixTimestampPayment,
           DAYS_AGO
         );
-      validThru =
-        unixTimestampToDateTime(
-          validThru
-        );
+      // validThru =
+      //   unixToHumanDate(validThru);
 
-      const formattedTimestampPayment =
-        unixTimestampToDateTime(
+      const lastPaymentObj =
+        unixToHumanDate(
           unixTimestampPayment
         );
       const statusObj = {
         unixTimestampPayment:
           unixTimestampPayment,
-        formattedTimestampPayment:
-          formattedTimestampPayment,
+        lastPaymentDateObj:
+          lastPaymentObj,
         blockPayment: blockNumPayment,
+        txnHash: txnHash,
         status: "Active",
         validThru: validThru,
+        validThruHumanDate:
+          unixToHumanDateTime(
+            validThru
+          ),
       };
       return statusObj;
     } else {
@@ -307,27 +314,31 @@ async function getStatus(
   }
 }
 
-function unixToHumanDay(unixTimestamp) {
+function unixToHumanDate(
+  unixTimestamp
+) {
   const milliseconds =
     unixTimestamp * 1000; // Convert seconds to milliseconds
   const dateObject = new Date(
     milliseconds
   );
 
-  const year = dateObject.getFullYear();
-  const month =
+  const y = dateObject.getFullYear();
+  const m =
     MONTHS[dateObject.getMonth()];
 
-  const day = dateObject
+  const d = dateObject
     .getDate()
     .toString();
 
-  const humanFormattedDate = `${month} ${day}, ${year}`;
-
-  return humanFormattedDate;
+  return {
+    day: d,
+    month: m,
+    year: y,
+  };
 }
 
-function unixToHumanDayAndTime(
+function unixToHumanDateTime(
   unixTimestamp
 ) {
   const milliseconds =
@@ -343,7 +354,6 @@ function unixToHumanDayAndTime(
   const day = dateObject
     .getDate()
     .toString();
-
   const hours = dateObject
     .getHours()
     .toString()
@@ -357,44 +367,13 @@ function unixToHumanDayAndTime(
     .toString()
     .padStart(2, "0");
 
-  const humanFormattedDate = `${month} ${day}, ${year}`;
+  const time =
+    dateObject.toLocaleTimeString(
+      "en-US",
+      { timeStyle: "short" }
+    );
 
-  return humanFormattedDate;
-}
-
-function unixTimestampToDateTime(
-  unixTimestamp
-) {
-  const milliseconds =
-    unixTimestamp * 1000; // Convert seconds to milliseconds
-  const dateObject = new Date(
-    milliseconds
-  );
-
-  const year = dateObject.getFullYear();
-  const month = (
-    dateObject.getMonth() + 1
-  )
-    .toString()
-    .padStart(2, "0");
-  const day = dateObject
-    .getDate()
-    .toString()
-    .padStart(2, "0");
-  const hours = dateObject
-    .getHours()
-    .toString()
-    .padStart(2, "0");
-  const minutes = dateObject
-    .getMinutes()
-    .toString()
-    .padStart(2, "0");
-  const seconds = dateObject
-    .getSeconds()
-    .toString()
-    .padStart(2, "0");
-
-  const formattedDateTime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+  const formattedDateTime = `${month} ${day}, ${year} ${time}`;
   return formattedDateTime;
 }
 
