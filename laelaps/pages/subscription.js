@@ -61,15 +61,6 @@ export default function Utility() {
       "mint_price"
     );
 
-  useEffect(() => {
-    if (
-      !isLoading &&
-      data !== undefined
-    ) {
-      setPrice(fromHex(data));
-    }
-  }, [isLoading, data]);
-
   function getTimeTillExp() {
     const milliseconds =
       times.statusObj.validThru * 1000; // Convert seconds to milliseconds
@@ -99,6 +90,15 @@ export default function Utility() {
       minutes,
     ]);
   }
+
+  useEffect(() => {
+    if (
+      !isLoading &&
+      data !== undefined
+    ) {
+      setPrice(fromHex(data));
+    }
+  }, [isLoading, data]);
 
   useEffect(() => {
     (async () => {
@@ -139,7 +139,16 @@ export default function Utility() {
         );
       }
     })();
+  }, [
+    isMismatched,
+    switchChain,
+    userAddress,
+    isLoading,
+    data,
+    price,
+  ]);
 
+  useEffect(() => {
     var interval = 0;
 
     if (times?.statusObj?.validThru) {
@@ -151,15 +160,7 @@ export default function Utility() {
 
     return () =>
       clearInterval(interval);
-  }, [
-    isMismatched,
-    switchChain,
-    userAddress,
-    isLoading,
-    data,
-    times,
-    price,
-  ]);
+  }, [times]);
 
   if (
     connectionStatus ===
