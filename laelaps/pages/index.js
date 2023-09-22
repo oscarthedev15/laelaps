@@ -18,7 +18,7 @@ export default function Home() {
             src="./images/image0.png"
             className={styles.AppLogo}
             alt="logo"
-          /> 
+          />
         </div>
       </div>
       <div className={styles.bigBox}>
@@ -40,7 +40,7 @@ export default function Home() {
         <a
           href="#"
           className={styles.bigLink}
-          onClick={(e) => handleLinkClick(e, "/MintPage")}
+          // onClick={(e) => handleLinkClick(e, "/MintPage")}
           target="_blank"
         >
           Master Key
@@ -64,7 +64,3 @@ export default function Home() {
     </div>
   );
 }
-
-
-
-
