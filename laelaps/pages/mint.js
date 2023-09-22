@@ -79,6 +79,16 @@ export default function Utility() {
     );
   }
 
+  if (Object.keys(nftMintInfo).length === 0 || !mintPrice) {
+    return (
+      <div className="flex justify-center items-center h-[80vh] w-full">
+        <p className="text-black text-lg w-3/4 text-center font-prozaReg">
+          Loading...
+        </p>
+      </div>
+    );
+  }
+
   return (
     <div className={styles.square}>
       <ConnectWallet />
@@ -90,7 +100,7 @@ export default function Utility() {
           className="h-auto max-w-[300px] hover:shadow-[rgba(0,_0,_0,_0.4)_0px_30px_90px] transition-all duration-300 cursor-pointer filter grayscale hover:grayscale-0 rounded-md"
         />
 
-        {!userNFTs?.length && mintPrice ? (
+        {!userNFTs?.length ? (
           <div className="relative flex flex-col flex-grow gap-6 text-center items-center min-h-[300px] justify-center ml-16 p-6 bg-white font-prozaReg border-2 border-[#9a4737] rounded-3xl shadow-[5px_5px_0px_0px_rgba(146,69,53,1)] ">
             <p className="text-3xl font-quattBold text-black">
               Want in? Mint your membership NFT below!
@@ -122,12 +132,13 @@ export default function Utility() {
                   console.log(error);
                 }
               }}
-              onSuccess={(result) =>
+              onSuccess={(result) => {
                 alert(
                   "Mint Successful! View your NFT on Opensea! Token address: ",
                   nftAddress
-                )
-              }
+                );
+                location.reload();
+              }}
               className="!bg-[#cc624a3b] !text-[#cc624a] !text-3xl !font-quattBold !rounded-3xl hover:!bg-[#cc624a47] !px-10"
             >
               Mint NFT
