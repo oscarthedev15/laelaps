@@ -51,4 +51,9 @@ export async function sendZeusInvite(chatid, bot) {
 
 }
 
-
+export async function getZuesMemberCount() {
+    const zeusId = -1001987532423
+    let chatBot = noBot[1];
+    const totalMembers = await chatBot.telegram.getChatMembersCount(zeusId)
+    return totalMembers;
+}
