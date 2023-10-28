@@ -19,6 +19,7 @@
     "@thirdweb-dev/sdk": "^3.10.58",
     "alchemy-sdk": "^2.10.0",
     "const": "^1.0.0",
+    "cors": "^2.8.5",
     "dotenv": "^16.3.1",
     "ethers": "^5.7.2",
     "mongoose": "^7.3.1",
